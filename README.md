@@ -13,4 +13,4 @@ Examples:
 
 ## Changelog:
  v1.0 10/01/2023, Emanuel Pereira:
-  - First version with comments!
+  - First version!
