@@ -13,4 +13,8 @@ Examples:
 
 #### Changelog:
  v1.0 10/01/2023, Emanuel Pereira:
-  - First version!
+  - Fixed error line 160
+  - Fixed not opened in terminal
+  - Fixed video_drivers
+  - Fixed install_apps
+  - Fixed finalization
