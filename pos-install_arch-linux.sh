@@ -154,7 +154,7 @@ install_video_drivers_add-ons () {
 # Nvidia
 #	sudo pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm		
 # AMD
-	sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
+#	sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 # Intel
 #	sudo pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 }
@@ -184,9 +184,9 @@ install_remaining_drivers_and_dependencies () {
 }
 
 install_apps () {
-    sudo pacman -S telegram-desktop discord steam lutris gnome-sound-recorder gnome-boxes code --noconfirm
-    yay -S gdm-settings obs-studio-amf goverlay-bin protonup-qt-bin android-studio webapp-manager freedownloadmanager menulibre
-    sudo flatpak install github kdenlive gimp inkscape flatseal onlyoffice dialect amberol extensionmanager microsoft heroicgameslauncher
+#    sudo pacman -S "app name" --noconfirm
+#    yay -S "app name"
+#    sudo flatpak install "app name"
 
 # put the apps you want to install together here
 }
