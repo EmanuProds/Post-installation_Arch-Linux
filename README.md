@@ -12,7 +12,7 @@ Examples:
 * $ ./pos-install_arch-linux.sh
 
 #### Changelog:
- v1.0 10/01/2023, Emanuel Pereira:
+ v1.1 11/01/2023, Emanuel Pereira:
   - Fixed error line 160
   - Fixed not opened in terminal
   - Fixed video_drivers
