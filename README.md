@@ -1,5 +1,5 @@
-# Pos-install Arch-Linux
-Facilitate post-install of Arch-Linux in minutes and personalized.
+# Post installation Arch Linux
+Facilitate post installation of Arch Linux in minutes and personalized.
 
 ### WHAT IT DOES?
 This script can be called by the normal way using "./".
@@ -9,7 +9,7 @@ I recommend that you open it in your favorite text editor and customize it with 
 
 ### HOW TO USE IT?
 Examples:
-* $ ./pos-install_arch-linux.sh
+* $ ./post-install_arch-linux.sh
 
 #### Changelog:
  v1.1 11/01/2023, Emanuel Pereira:
