@@ -154,7 +154,7 @@ install_video_drivers_add-ons () {
 # Nvidia
 #	sudo pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm		
 # AMD
-#	sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
+	sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 # Intel
 #	sudo pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 }
@@ -208,22 +208,23 @@ finalization () {
 #------------------------------------------------------------------------ #
 # Commands (uncomment the ones you want to use)
 #------------------------------------------------------------------------ #
-#create_temporary_post_install_folder
-#install_wget
-#add_multilib_repository_color_cache_cleaner
-#install_yay
-#install_themes_wallpapers
-#install_plymouth_silent_boot_config_grub
-#remove_startup_beep
+create_temporary_post_install_folder
+install_wget
+add_multilib_repository_color_cache_cleaner
+install_yay
+install_themes_wallpapers
+install_plymouth_silent_boot_config_grub
+remove_startup_beep
 #re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF
 #re-enable_GNOME_battery_consumption_modes-43
-#install_neofetch
-#install_qt5ct
-#install_video_drivers_add-ons
-#install_pamac_app_store
-#install_wine_staging_and_dependencies
-#install_lutris_dependencies
-#install_remaining_drivers_and_dependencies
+install_neofetch
+install_qt5ct
+install_video_drivers_add-ons
+install_pamac_app_store
+install_wine_staging_and_dependencies
+install_lutris_dependencies
+install_remaining_drivers_and_dependencies
 #install_apps
-#install_cache_remove
+install_cache_remove
+finalization
 #------------------------------------------------------------------------ #
