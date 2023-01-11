@@ -68,7 +68,7 @@ add_multilib_repository_color_cache_cleaner () {
 
 re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF () {
     sudo rfkill unblock bluetooth
-    sudo systemctl enable bluetooth 
+    sudo systemctl enable bluetooth
     sudo systemctl start bluetooth
 }
 
@@ -104,7 +104,7 @@ install_qt5ct () {
 }
 
 install_plymouth_silent_boot_config_grub () {
-    yay -S plymouth gdm-plymouth plymouth-theme-monoarch
+    yay -S plymouth gdm-plymouth plymouth-theme-arch-charge-gdm-spinner
     sudo nano /etc/mkinitcpio.conf
 
 # add:
@@ -144,7 +144,7 @@ install_plymouth_silent_boot_config_grub () {
 #   StandardOutput=null
 #	StandardError=journal+console
 
-    sudo plymouth-set-default-theme -R monoarch
+    sudo plymouth-set-default-theme -R arch-charge-gdm-spinner
     sudo mkinitcpio -P linux; sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 
