@@ -68,7 +68,7 @@ add_multilib_repository_color_cache_cleaner () {
 
 re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF () {
     sudo rfkill unblock bluetooth
-    sudo systemctl enable bluetooth
+    sudo systemctl enable bluetooth 
     sudo systemctl start bluetooth
 }
 
