@@ -60,7 +60,7 @@ add_multilib_repository_color_cache_cleaner () {
 ## Brazil
 #Server = http://archlinux.c3sl.ufpr.br/$repo/os/$arch
 }
-install_yay () {
+install_yay_and_paru () {
 	sudo pacman -S git base-devel --noconfirm
 	git clone https://aur.archlinux.org/paru.git 
 	cd paru
@@ -277,7 +277,7 @@ finalization () {
 #------------------------------------------------------------------------ #
 create_temporary_post_install_folder
 add_multilib_repository_color_cache_cleaner
-install_yay
+install_yay_and_paru
 #install_zsh_terminal-customizations
 install_themes_wallpapers
 install_qt5ct

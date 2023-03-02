@@ -12,9 +12,11 @@ Examples:
 * $ ./post-install_arch-linux.sh
 
 #### Changelog:
- v1.1 11/01/2023, Emanuel Pereira:
-  - Fixed error line 160
-  - Fixed not opened in terminal
-  - Fixed video_drivers
-  - Fixed install_apps
-  - Fixed finalization
+ v1.1 02/03/2023, Emanuel Pereira:
+  - Massive update
+  - Fixed bugs in zsh
+  - Fixed plymouth
+  - Fixed locales
+  - Fixed cache remove
+  - Fixed zram file swap
+
