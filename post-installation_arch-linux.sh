@@ -102,14 +102,6 @@ install_themes_wallpapers_and_extensions () {
 	sudo pacman -S archlinux-wallpaper papirus-icon-theme --noconfirm
 	paru -S --noconfirm papirus-folders
 	sudo papirus-folders -C yellow --theme Papirus-Dark
-	paru -S gnome-shell-extension-alphabetical-grid-extension gnome-shell-extension-keepawake-git gnome-shell-extension-appindicator gnome-shell-extension-arc-menu gnome-shell-extension-arch-update gnome-shell-extension-bluetooth-quick-connect gnome-shell-extension-dash-to-dock gnome-shell-extension-gsconnect gnome-shell-extension-gtktitlebar-git gnome-shell-extension-just-perfection-desktop gnome-shell-extension-keepawake-git gnome-shell-extension-panel-corners gnome-shell-extension-quick-settings-tweaks-git gnome-shell-extension-rounded-window-corners
-	git clone https://github.com/velitasali/gnome-shell-extension-awesome-tiles
-	cd gnome-shell-extension-awesome-tiles
-	./install.sh
-	cd ..
-# after installing the "Extension Manager", install the "Order Gnome Shell Extensions".
-# go to "$HOME/pos-install-script" folder, unzip the two downloaded files and run ./install.sh
-# of each one to your liking to install the themes. OBS.: don't forget to use --help to see the parameters of installers.
 	sudo flatpak override --filesystem=$HOME/.themes
 	sudo flatpak override --env=GTK_THEME=Adw-dark
 
@@ -117,7 +109,7 @@ install_themes_wallpapers_and_extensions () {
 install_qt5ct () {
 	sudo pacman -S qt5ct --noconfirm
 	sudo nvim /etc/environment
-#add "QT_QPA_PLATFORMTHEME=qt5ct" in end-line. 
+# add "QT_QPA_PLATFORMTHEME=qt5ct" in end-line. 
 }
 install_plymouth_silent_boot_config_grub () {
 	paru -S plymouth gdm-plymouth plymouth-theme-arch-charge-big
@@ -175,8 +167,8 @@ install_video_drivers_add-ons () {
 #	sudo pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 }
 app_store () {
-	sudo pacman -S gnome-software-packagekit-plugin --noconfirm
-#	paru -S --noconfirm pamac-flatpak
+	sudo pacman -Rsc gnome-software gnome-software-packagekit-plugin --noconfirm
+	paru -S pamac-flatpak
 }
 install_wine_staging_and_dependencies () {
 	sudo pacman -S wine-staging winetricks wine-mono wine-gecko --noconfirm
@@ -217,10 +209,25 @@ re-enable_GNOME_battery_consumption_modes-43 () {
 install_apps () {
 	sudo pacman -S firefox gnome-sound-recorder gnome-boxes --noconfirm
 	paru -S menulibre goverlay-bin freedownloadmanager gdm-settings adwaita-qt6 adwaita-qt5 notion-app-enhanced gthumb qt6ct gparted python-librosa betterdiscordinstaller-bin webapp-manager epson-inkjet-printer-escpr
-#	kvantum kvantum-theme-libadwaita-git
-#	flatpak install flathub com.visualstudio.code com.github.unrud.VideoDownloader com.obsproject.Studio org.gimp.GIMP org.inkscape.Inkscape com.github.tchx84.Flatseal app.drey.Dialect com.heroicgameslauncher.hgl com.google.AndroidStudio net.davidotek.pupgui2 com.microsoft.Edge com.github.neithern.g4music com.github.GradienceTeam.Gradience org.audacityteam.Audacity org.kde.kdenlive com.anydesk.Anydesk org.telegram.desktop com.discordapp.Discord com.valvesoftware.Steam org.libreoffice.LibreOffice com.bitwarden.desktop com.mattjakeman.ExtensionManager net.lutris.Lutris org.duckstation.DuckStation net.pcsx2.PCSX2 org.citra_emu.citra org.ryujinx.Ryujinx org.yuzu_emu.yuzu io.mgba.mGBA net.brinkervii.grapejuice
+#	paru -S kvantum kvantum-theme-libadwaita-git
+	flatpak install flathub com.visualstudio.code com.github.unrud.VideoDownloader com.obsproject.Studio org.gimp.GIMP org.inkscape.Inkscape com.github.tchx84.Flatseal app.drey.Dialect com.heroicgameslauncher.hgl com.google.AndroidStudio net.davidotek.pupgui2 com.microsoft.Edge com.github.neithern.g4music com.github.GradienceTeam.Gradience org.audacityteam.Audacity org.kde.kdenlive com.anydesk.Anydesk org.telegram.desktop com.discordapp.Discord com.valvesoftware.Steam org.libreoffice.LibreOffice com.bitwarden.desktop com.mattjakeman.ExtensionManager net.lutris.Lutris org.duckstation.DuckStation net.pcsx2.PCSX2 org.citra_emu.citra org.ryujinx.Ryujinx org.yuzu_emu.yuzu io.mgba.mGBA net.brinkervii.grapejuice -y
 #
 # put the apps you want to install together here.
+# after installing the "Extension Manager", install your favorites extensions.
+#	Alphabetical Grid Extension
+#	Keep Awake Appindicator
+#	Arc-menu 
+#	Arch Update
+#	Bluetooth-quick-connect
+#	Dash-to-dock
+#	Gsconnect 
+#	GTK Title Bar 
+#	Just Perfection
+#	Keep Awake
+#	Panel-corners
+#	Quick Settings Tweaker 
+#	Rounded-window-corners
+#	Awesome Tiles
 }
 create_zramd_swap_file () {
 # i suppose you have installed at Arch Linux without the /swap, Start by creating a file which will be used for swap. Note: if you have <= 4gb = twice the ram for swap file i.e 8gb. If you have > 4gb then you should have ram +2gb i.e 6gb in this case. Here we create 10gb swapfile for 8gb ram.
