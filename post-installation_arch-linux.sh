@@ -70,11 +70,9 @@ install_yay_and_paru () {
 	cd paru
 	makepkg -si
 	cd ..
-	rm -rf /paru
 	git clone https://aur.archlinux.org/yay.git 
 	cd yay
 	makepkg -si
-	cd ..
 	rm -rf /yay
 	yay -Y --gendb
 	sudo nvim /etc/makepkg.conf
@@ -99,15 +97,22 @@ install_zsh_terminal-customizations () {
 	sudo chsh -s /usr/bin/zsh
 	cd ..
 }
-install_themes_wallpapers () {
+install_themes_wallpapers_and_extensions () {
 	paru -S --noconfirm adw-gtk-theme adwaita-dark xcursor-simp1e-adw-dark archlinux-artwork
 	sudo pacman -S archlinux-wallpaper papirus-icon-theme --noconfirm
 	paru -S --noconfirm papirus-folders
 	sudo papirus-folders -C yellow --theme Papirus-Dark
+	paru -S gnome-shell-extension-alphabetical-grid-extension gnome-shell-extension-keepawake-git gnome-shell-extension-appindicator gnome-shell-extension-arc-menu gnome-shell-extension-arch-update gnome-shell-extension-bluetooth-quick-connect gnome-shell-extension-dash-to-dock gnome-shell-extension-gsconnect gnome-shell-extension-gtktitlebar-git gnome-shell-extension-just-perfection-desktop gnome-shell-extension-keepawake-git gnome-shell-extension-panel-corners gnome-shell-extension-quick-settings-tweaks-git gnome-shell-extension-rounded-window-corners
+	git clone https://github.com/velitasali/gnome-shell-extension-awesome-tiles
+	cd gnome-shell-extension-awesome-tiles
+	./install.sh
+	cd ..
+# after installing the "Extension Manager", install the "Order Gnome Shell Extensions".
 # go to "$HOME/pos-install-script" folder, unzip the two downloaded files and run ./install.sh
 # of each one to your liking to install the themes. OBS.: don't forget to use --help to see the parameters of installers.
 	sudo flatpak override --filesystem=$HOME/.themes
 	sudo flatpak override --env=GTK_THEME=Adw-dark
+
 }
 install_qt5ct () {
 	sudo pacman -S qt5ct --noconfirm
@@ -283,7 +288,7 @@ create_temporary_post_install_folder
 add_multilib_repository_color_cache_cleaner
 install_yay_and_paru
 #install_zsh_terminal-customizations
-install_themes_wallpapers
+install_themes_wallpapers_and_extensions
 install_qt5ct
 install_plymouth_silent_boot_config_grub
 install_video_drivers_add-ons
