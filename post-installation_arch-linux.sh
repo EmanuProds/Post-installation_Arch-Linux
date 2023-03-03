@@ -22,12 +22,16 @@
 #
 #   v1.0 02/03/2023, Emanuel Pereira:
 #     - Massive update!
-#     - Bugs corrections
-#     - Add new command lines
+#     - Fixed bugs in zsh
+#     - Fixed plymouth
+#     - Fixed locales
+#     - Fixed cache remove
+#     - Fixed zram file swap
 #
 # ------------------------------------------------------------------------ #
 # Tested on:
-#   bash 5.1.16
+#   bash 5.1.016-3
+#   zsh 5.9-3
 # ------------------------------------------------------------------------ #
 DIRETORY_TEMP='$HOME/.tpm/'
 DIRETORY_DOWNLOAD='$HOME/Downloads/'

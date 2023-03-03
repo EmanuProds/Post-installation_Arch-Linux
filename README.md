@@ -18,5 +18,5 @@ Examples:
   - Fixed plymouth
   - Fixed locales
   - Fixed cache remove
-  - Fixed zram file swap
+  - Fixed zram file swap 
 
