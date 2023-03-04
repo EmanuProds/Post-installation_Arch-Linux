@@ -273,7 +273,7 @@ remove_startup_beep
 re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF
 re-enable_GNOME_battery_consumption_modes-43
 #install_apps
-#create_zramd_swap_file
+create_zramd_swap_file
 #refresh_keys_to_remove_lags_in_system
 #bugs_corrections
 install_cache_remove_and_remove_temporary_files
