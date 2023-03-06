@@ -105,6 +105,9 @@ install_themes_wallpapers_and_extensions () {
 	sudo cp -fR Adw Adw-dark adw-gtk3 adw-gtk3-dark ~/.themes
 	sudo flatpak override --filesystem=$HOME/.themes
 	sudo flatpak override --env=GTK_THEME=Adw-dark
+	git clone https://github.com/rafaelmardojai/firefox-gnome-theme && cd firefox-gnome-theme
+	./scripts/auto-install.sh
+	cd DIRETORY_TEMP
 }
 install_qt5ct () {
 	sudo pacman -S qt5ct --noconfirm
