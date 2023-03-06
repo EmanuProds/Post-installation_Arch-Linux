@@ -81,9 +81,7 @@ install_zsh_terminal-customizations () {
 	sudo pacman -S zsh yarn npm zsh-history-substring-search zsh-syntax-highlighting zsh-autosuggestions zsh-theme-powerlevel10k powerline-fonts awesome-terminal-fonts
 --noconfirm
 	paru -S --noconfirm asdf-vm ttf-meslo-nerd-font-powerlevel10k zsh-autocomplete-git
-	echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
-	mkdir .zsh
-	cd .zsh
+#	echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 	cargo install bat exa procs tokei ytop tealdeer grex rmesg zoxide   
 # edit .zshrc include this parameters.
 # Zsh plugins.
