@@ -100,6 +100,9 @@ install_themes_wallpapers_and_extensions () {
 	sudo pacman -S archlinux-wallpaper papirus-icon-theme --noconfirm
 	paru -S --noconfirm papirus-folders
 	sudo papirus-folders -C yellow --theme Papirus-Dark
+	mkdir ~/.themes
+	cd /usr/share/themes
+	sudo cp -fR Adw Adw-dark adw-gtk3 adw-gtk3-dark ~/.themes
 	sudo flatpak override --filesystem=$HOME/.themes
 	sudo flatpak override --env=GTK_THEME=Adw-dark
 }
