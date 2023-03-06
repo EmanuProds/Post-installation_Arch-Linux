@@ -114,10 +114,7 @@ install_qt5ct () {
 }
 install_plymouth_silent_boot_config_grub () {
 	paru -S plymouth gdm-plymouth plymouth-theme-arch-charge-big
-	git clone https://github.com/fghibellini/arch-silence
-	cd arch-silence
-	sudo ./install
-	cd ..
+	git clone https://github.com/AdisonCavani/distro-grub-themes.git
 	sudo nvim /etc/mkinitcpio.conf
 # add:
 # 	MODULES="amdgpu"        
@@ -141,6 +138,8 @@ install_plymouth_silent_boot_config_grub () {
 # open the grub-customizer, click on the Arch Linux entry and click edit. After that, pay all the lines with echo:
 # 	echo ‘Loading Linux linux …’
 #	echo ‘Loading initial ramdisk …’
+# install theme, click on "appearance settings" tab, in "Custom resolution" and select or type in your resolution, e.g 1920x1080.
+# in "theme" tab, click on "+" and select your "theme.tar" favorite in "distro-grub-themes" folder.
 #
 	sudo systemctl edit --full systemd-fsck-root.service
 # add below ExecStart:
