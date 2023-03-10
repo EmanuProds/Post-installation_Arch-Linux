@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 #
 # Facilitate post installation Arch Linux in minutes personalizated.
 #
@@ -53,34 +53,34 @@ add_multilib_repository_color_cache_cleaner () {
 #	sudo reflector -c brazil -f 5 --save /etc/pacman.d/mirrorlist
 # if necessary, acess https://archlinux.org/mirrorlist/, copy mirrors and use sudo nvim /etc/pacman.d/mirrorlist to customize mirrorlist.
 #
-### Brazil
-#Server = http://br.mirror.archlinux-br.org/$repo/os/$arch
 ## Brazil
-#Server = http://linorg.usp.br/archlinux/$repo/os/$arch
+Server = https://mirror.ufscar.br/archlinux/$repo/os/$arch
 ## Brazil
-#Server = http://mirror.ufscar.br/archlinux/$repo/os/$arch
+Server = http://mirror.ufscar.br/archlinux/$repo/os/$arch
 ## Brazil
-#Server = http://archlinux.c3sl.ufpr.br/$repo/os/$arch
+Server = http://archlinux.c3sl.ufpr.br/$repo/os/$arch
+## Brazil
+Server = http://linorg.usp.br/archlinux/$repo/os/$arch
+## Brazil
+Server = http://br.mirror.archlinux-br.org/$repo/os/$arch
 }
 install_yay_and_paru () {
 	sudo pacman -S git base-devel --noconfirm
-	git clone https://aur.archlinux.org/paru.git 
-	cd paru
-	makepkg -si
-	cd ..
 	git clone https://aur.archlinux.org/yay.git 
 	cd yay
 	makepkg -si
-	rm -rf /yay
 	yay -Y --gendb
+	rm -rf /yay
+	cd ..
+	sudo rm -rf yay/
 	sudo nvim /etc/makepkg.conf
 # uncomment and add "j" (OBS.: beside the "J", add half of your processor's total cpu cores.
 #   MAKEFLAGS="-j6"
+	yay -Syu --noconfirm paru-bin
 }
 install_zsh_terminal-customizations () {
-	sudo pacman -S zsh yarn npm zsh-history-substring-search zsh-syntax-highlighting zsh-autosuggestions zsh-theme-powerlevel10k powerline-fonts awesome-terminal-fonts
---noconfirm
-	paru -S --noconfirm asdf-vm ttf-meslo-nerd-font-powerlevel10k zsh-autocomplete-git
+	sudo pacman -S zsh yarn npm zsh-history-substring-search zsh-syntax-highlighting zsh-autosuggestions zsh-theme-powerlevel10k powerline-fonts awesome-terminal-fonts ttf-meslo-nerd --noconfirm
+	paru -S --noconfirm asdf-vm
 #	echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
 	cargo install bat exa procs tokei ytop tealdeer grex rmesg zoxide   
 # edit .zshrc include this parameters.
@@ -91,7 +91,6 @@ install_zsh_terminal-customizations () {
 # LunarVim dependence.
 #   export PATH=~/.cargo/bin:~/.local/bin:$PATH
 	chsh -s /usr/bin/zsh
-	cd ..
 }
 install_themes_wallpapers_and_extensions () {
 	paru -S --noconfirm adw-gtk-theme adwaita-dark xcursor-simp1e-adw-dark archlinux-artwork
@@ -103,6 +102,7 @@ install_themes_wallpapers_and_extensions () {
 	sudo cp -fR Adw Adw-dark adw-gtk3 adw-gtk3-dark ~/.themes
 	sudo flatpak override --filesystem=$HOME/.themes
 	sudo flatpak override --env=GTK_THEME=Adw-dark
+	cd DIRETORY_TEMP
 	git clone https://github.com/rafaelmardojai/firefox-gnome-theme && cd firefox-gnome-theme
 	./scripts/auto-install.sh
 	cd DIRETORY_TEMP
@@ -131,7 +131,7 @@ install_plymouth_silent_boot_config_grub () {
 #   	GRUB_TIMEOUT_STYLE=“hidden”
 #	GRUB_HIDDEN_TIMEOUT=3
 #
-#	GRUB_THEME="/boot/grub/themes/arch-silence/theme.txt"
+#	GRUB_THEME="/boot/grub/themes/lenovo/theme.txt"
 #
 	sudo pacman -S grub-customizer --noconfirm
 	grub-customizer
@@ -169,7 +169,7 @@ install_video_drivers_add-ons () {
 app_store () {
 	sudo pacman -Rsc gnome-software --noconfirm
 #	sudo pacman -S gnome-software-packagekit-plugin
-	paru -S pamac-flatpak
+	paru -S pamac-flatpak-gnome
 }
 install_wine_staging_and_dependencies () {
 	sudo pacman -S wine-staging winetricks wine-mono wine-gecko --noconfirm
@@ -184,7 +184,7 @@ install_lutris_and_dependencies () {
 	sudo pacman -S zenity gcc-libs gnutls vulkan-validation-layers vulkan-intel vulkan-radeon vulkan-icd-loader libva fontconfig lcms2 libxml2 libxcursor libxrandr libxdamage libxi gettext freetype2 glu libsm libpcap faudio giflib libpng libldap mpg123 openal v4l-utils libpulse alsa-lib alsa-plugins libjpeg-turbo libxcomposite libxinerama ocl-icd libxslt gst-plugins-base-libs vkd3d sdl2 sdl2_ttf sdl2_image sdl2_net libcups libidn11 pixman zlib mesa ncurses krb5 libxcb cairo libx11 libx86emu libxss libgphoto2 sane noto-fonts-emoji lib32-glibc lib32-gcc-libs lib32-gnutls lib32-vulkan-validation-layers lib32-vulkan-intel lib32-vulkan-radeon lib32-vulkan-icd-loader lib32-libva lib32-fontconfig lib32-lcms2 lib32-libxml2 lib32-libxcursor lib32-libxrandr lib32-libxdamage lib32-libxi lib32-gettext lib32-freetype2 lib32-glu lib32-libsm lib32-faudio lib32-libpcap lib32-giflib lib32-libpng lib32-libldap lib32-mpg123 lib32-openal lib32-v4l-utils lib32-libpulse lib32-alsa-lib lib32-alsa-plugins lib32-libjpeg-turbo lib32-libxcomposite lib32-libxinerama lib32-ocl-icd lib32-libxslt lib32-gst-plugins-base-libs lib32-vkd3d lib32-sdl2 lib32-sdl2_ttf lib32-sdl2_image lib32-libcups lib32-libidn11 lib32-pixman lib32-zlib lib32-mesa lib32-cairo lib32-libx11 lib32-libxcb lib32-krb5 lib32-ncurses lib32-libxss gamemode lib32-gamemode --noconfirm
 }
 install_remaining_drivers_and_dependencies () {
-	sudo pacman -S bluez-utils foomatic-db foomatic-db-engine foomatic-db-gutenprint-ppds foomatic-db-nonfree-ppds foomatic-db-ppds fprintd gutenprint libfprint system-config-printer cups cups-pdf bluez-cups print-manager sane-airscan sane-gt68xx-firmware noto-fonts ttf-bitstream-vera ttf-croscore ttf-dejavu ttf-droid ttf-ibm-plex ttf-liberation inter-font gtk2 java-rhino openjdk-src jdk-openjdk jre-openjdk-headless jre-openjdk gvfs-goa gvfs-google mtpfs gvfs-mtp gvfs-gphoto2 bash-completion ffmpegthumbnailer ffmpegthumbs noto-fonts-emoji ntfs-3g android-tools unrar libquvi faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore ffmpeg ffmpeg4.4 gst-plugins-ugly gst-plugins-good gst-plugins-base gst-plugins-bad gst-libav gstreamer fwupd gnome-firmware gufw ufw-extras --noconfirm
+	sudo pacman -S bluez-utils libgda foomatic-db foomatic-db-engine foomatic-db-gutenprint-ppds foomatic-db-nonfree-ppds foomatic-db-ppds fprintd gutenprint libfprint system-config-printer cups cups-pdf bluez-cups print-manager sane-airscan sane-gt68xx-firmware noto-fonts ttf-bitstream-vera ttf-croscore ttf-dejavu ttf-droid ttf-ibm-plex ttf-liberation inter-font gtk2 java-rhino openjdk-src jdk-openjdk jre-openjdk-headless jre-openjdk gvfs-goa gvfs-google mtpfs gvfs-mtp gvfs-gphoto2 bash-completion ffmpegthumbnailer ffmpegthumbs noto-fonts-emoji ntfs-3g android-tools unrar libquvi faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore ffmpeg ffmpeg4.4 gst-plugins-ugly gst-plugins-good gst-plugins-base gst-plugins-bad gst-libav gstreamer fwupd gnome-firmware gufw ufw-extras --noconfirm
 	sudo systemctl enable --now cups
 	sudo usermod -aG lp emanuel
 	sudo usermod -aG saned,scanner emanuel
@@ -211,7 +211,7 @@ install_apps () {
 	sudo pacman -S gnome-sound-recorder gnome-boxes --noconfirm
 	paru -S menulibre goverlay-bin freedownloadmanager gdm-settings adwaita-qt6 adwaita-qt5 notion-app-enhanced gthumb qt6ct gparted python-librosa webapp-manager epson-inkjet-printer-escpr
 #	paru -S kvantum kvantum-theme-libadwaita-git
-	flatpak install flathub com.visualstudio.code io.github.Foldex.AdwSteamGtk com.github.unrud.VideoDownloader com.obsproject.Studio org.gimp.GIMP org.inkscape.Inkscape com.github.tchx84.Flatseal app.drey.Dialect com.heroicgameslauncher.hgl com.google.AndroidStudio net.davidotek.pupgui2 com.microsoft.Edge com.github.neithern.g4music com.github.GradienceTeam.Gradience org.audacityteam.Audacity org.kde.kdenlive com.anydesk.Anydesk org.telegram.desktop com.discordapp.Discord com.valvesoftware.Steam org.libreoffice.LibreOffice com.bitwarden.desktop com.mattjakeman.ExtensionManager net.lutris.Lutris org.duckstation.DuckStation net.pcsx2.PCSX2 org.citra_emu.citra org.ryujinx.Ryujinx org.yuzu_emu.yuzu io.mgba.mGBA net.brinkervii.grapejuice org.gnome.World.PikaBackup org.mozilla.firefox -y
+	flatpak install flathub com.visualstudio.code io.github.Foldex.AdwSteamGtk com.github.unrud.VideoDownloader com.obsproject.Studio org.gimp.GIMP org.inkscape.Inkscape com.github.tchx84.Flatseal app.drey.Dialect com.heroicgameslauncher.hgl com.google.AndroidStudio net.davidotek.pupgui2 com.microsoft.Edge com.github.neithern.g4music com.github.GradienceTeam.Gradience org.audacityteam.Audacity org.kde.kdenlive com.anydesk.Anydesk org.telegram.desktop com.discordapp.Discord com.valvesoftware.Steam org.libreoffice.LibreOffice com.bitwarden.desktop com.mattjakeman.ExtensionManager net.lutris.Lutris org.duckstation.DuckStation net.pcsx2.PCSX2 org.citra_emu.citra org.ryujinx.Ryujinx org.yuzu_emu.yuzu io.mgba.mGBA net.brinkervii.grapejuice com.valvesoftware.Steam.Utility.MangoHud org.freedesktop.Platform.VulkanLayer.MangoHud  org.gnome.World.PikaBackup -y
 #
 # put the apps you want to install together here.
 # after installing the "Extension Manager", install your favorites extensions.
@@ -233,7 +233,7 @@ install_apps () {
 create_zramd () {
 	paru -S zramd --noconfirm
 	sudo nvim /etc/default/zramd
-# add in "Max total swap size" in "MAX_SIZE=12288"
+# add in "Max total swap size" in "MAX_SIZE=8192"
 	sudo systemctl enable --now zramd.service
 }
 refresh_keys_to_remove_lags_in_system () {
@@ -276,7 +276,7 @@ remove_startup_beep
 re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF
 re-enable_GNOME_battery_consumption_modes-43
 #install_apps
-create_zramd_swap_file
+create_zramd
 #refresh_keys_to_remove_lags_in_system
 #bugs_corrections
 install_cache_remove_and_remove_temporary_files
