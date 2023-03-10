@@ -106,6 +106,8 @@ install_themes_wallpapers_and_extensions () {
 	git clone https://github.com/rafaelmardojai/firefox-gnome-theme && cd firefox-gnome-theme
 	./scripts/auto-install.sh
 	cd DIRETORY_TEMP
+    gnome-tweaks
+# select themes and icon themes.
 }
 install_qt5ct () {
 	sudo pacman -S qt5ct --noconfirm
@@ -123,15 +125,13 @@ install_plymouth_silent_boot_config_grub () {
 # add "kernel.printk = 3 3 3 3" in end-line.
 	sudo nvim /etc/default/grub
 # add:
-#   	GRUB_DEFAULT=“0”
+#   GRUB_DEFAULT=“0”
 #	GRUB_TIMEOUT=“0”
 #	GRUB_RECORDFAIL_TIMEOUT=$GRUB_HIDDEN_TIMEOUT
 #	GRUB_CMDLINE_LINUX_DEFAULT="rw quiet splash loglevel=3 bgrt_disable rd.systemd.show_status=auto rd.udev.log_priority=3 vt.global_cursor_default=0 vga=current"
 #
-#   	GRUB_TIMEOUT_STYLE=“hidden”
+#   GRUB_TIMEOUT_STYLE=“hidden”
 #	GRUB_HIDDEN_TIMEOUT=3
-#
-#	GRUB_THEME="/boot/grub/themes/lenovo/theme.txt"
 #
 	sudo pacman -S grub-customizer --noconfirm
 	grub-customizer
@@ -160,9 +160,9 @@ install_video_drivers_add-ons () {
 # uncomment the respective brand of your video card.
 #
 # Nvidia
-#	sudo pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm		
+	sudo pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm		
 # AMD
-	sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
+#	sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 # Intel
 #	sudo pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 }
@@ -186,13 +186,8 @@ install_lutris_and_dependencies () {
 install_remaining_drivers_and_dependencies () {
 	sudo pacman -S bluez-utils libgda foomatic-db foomatic-db-engine foomatic-db-gutenprint-ppds foomatic-db-nonfree-ppds foomatic-db-ppds fprintd gutenprint libfprint system-config-printer cups cups-pdf bluez-cups print-manager sane-airscan sane-gt68xx-firmware noto-fonts ttf-bitstream-vera ttf-croscore ttf-dejavu ttf-droid ttf-ibm-plex ttf-liberation inter-font gtk2 java-rhino openjdk-src jdk-openjdk jre-openjdk-headless jre-openjdk gvfs-goa gvfs-google mtpfs gvfs-mtp gvfs-gphoto2 bash-completion ffmpegthumbnailer ffmpegthumbs noto-fonts-emoji ntfs-3g android-tools unrar libquvi faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore ffmpeg ffmpeg4.4 gst-plugins-ugly gst-plugins-good gst-plugins-base gst-plugins-bad gst-libav gstreamer fwupd gnome-firmware gufw ufw-extras --noconfirm
 	sudo systemctl enable --now cups
-	sudo usermod -aG lp emanuel
-	sudo usermod -aG saned,scanner emanuel
-}
-add_locales () {
-	sudo nvim /etc/locale.gen
-# add pt_BR.UTF-8 UTF-8 in end-line.
-	sudo locale-gen
+	sudo usermod -aG lp
+	sudo usermod -aG saned,scanner
 }
 remove_startup_beep () {
 	sudo rmmod pcspkr
@@ -209,9 +204,8 @@ re-enable_GNOME_battery_consumption_modes-43 () {
 }
 install_apps () {
 	sudo pacman -S gnome-sound-recorder gnome-boxes --noconfirm
-	paru -S menulibre goverlay-bin freedownloadmanager gdm-settings adwaita-qt6 adwaita-qt5 notion-app-enhanced gthumb qt6ct gparted python-librosa webapp-manager epson-inkjet-printer-escpr
-#	paru -S kvantum kvantum-theme-libadwaita-git
-	flatpak install flathub com.visualstudio.code io.github.Foldex.AdwSteamGtk com.github.unrud.VideoDownloader com.obsproject.Studio org.gimp.GIMP org.inkscape.Inkscape com.github.tchx84.Flatseal app.drey.Dialect com.heroicgameslauncher.hgl com.google.AndroidStudio net.davidotek.pupgui2 com.microsoft.Edge com.github.neithern.g4music com.github.GradienceTeam.Gradience org.audacityteam.Audacity org.kde.kdenlive com.anydesk.Anydesk org.telegram.desktop com.discordapp.Discord com.valvesoftware.Steam org.libreoffice.LibreOffice com.bitwarden.desktop com.mattjakeman.ExtensionManager net.lutris.Lutris org.duckstation.DuckStation net.pcsx2.PCSX2 org.citra_emu.citra org.ryujinx.Ryujinx org.yuzu_emu.yuzu io.mgba.mGBA net.brinkervii.grapejuice com.valvesoftware.Steam.Utility.MangoHud org.freedesktop.Platform.VulkanLayer.MangoHud  org.gnome.World.PikaBackup -y
+	paru -S menulibre goverlay-bin freedownloadmanager gdm-settings adwaita-qt6 adwaita-qt5 gthumb qt6ct gparted python-librosa webapp-manager epson-inkjet-printer-escpr
+	flatpak install flathub io.github.Foldex.AdwSteamGtk com.github.unrud.VideoDownloader com.obsproject.Studio org.gimp.GIMP com.github.tchx84.Flatseal com.heroicgameslauncher.hgl net.davidotek.pupgui2 com.github.neithern.g4music com.discordapp.Discord com.valvesoftware.Steam org.libreoffice.LibreOffice com.mattjakeman.ExtensionManager net.lutris.Lutris net.pcsx2.PCSX2 org.citra_emu.citra org.yuzu_emu.yuzu net.brinkervii.grapejuice com.valvesoftware.Steam.Utility.MangoHud org.freedesktop.Platform.VulkanLayer.MangoHud org.gnome.World.PikaBackup -y
 #
 # put the apps you want to install together here.
 # after installing the "Extension Manager", install your favorites extensions.
@@ -219,7 +213,6 @@ install_apps () {
 #	Appindicator
 #	Arc-menu 
 #	Arch Update
-#	Bluetooth-quick-connect
 #	Dash-to-dock
 #	Gsconnect 
 #	GTK Title Bar 
@@ -228,20 +221,20 @@ install_apps () {
 #	Panel-corners
 #	Quick Settings Tweaker 
 #	Rounded-window-corners
-#	Awesome Tiles
 }
 create_zramd () {
 	paru -S zramd --noconfirm
 	sudo nvim /etc/default/zramd
-# add in "Max total swap size" in "MAX_SIZE=8192"
+# add in "Max total swap size" in "MAX_SIZE=2048"
 	sudo systemctl enable --now zramd.service
 }
-refresh_keys_to_remove_lags_in_system () {
-	sudo pacman-key --refresh-keys
+bugs_corrections () {
+	nvim ~/.config/mimeapps.list
+# add "inode/directory=org.gnome.Nautilus.desktop" in [Default Applications] line, to remove visual studio code for default.
 }
 install_cache_remove_and_remove_temporary_files () {
-	sudo pacman -S pacman-contrib --noconfirm
-	sudo pacman -Rsc gnome-contacts gnome-music htop vim epiphany gnome-maps eog
+	sudo pacman -S pacman-contrib gnome-terminal --noconfirm
+	sudo pacman -Rsc gnome-contacts gnome-console gnome-music htop vim epiphany gnome-maps eog
 #	sudo pacman -Sc --noconfirm
 #	sudo paccache -r --noconfirm
 #	paccache -ruk0 --noconfirm
@@ -273,6 +266,6 @@ re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF
 re-enable_GNOME_battery_consumption_modes-43
 install_apps
 create_zramd
-#refresh_keys_to_remove_lags_in_system
+bugs_corrections
 install_cache_remove_and_remove_temporary_files
 finalization
