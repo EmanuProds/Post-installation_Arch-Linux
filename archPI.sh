@@ -54,15 +54,15 @@ add_multilib_repository_color_cache_cleaner () {
 # if necessary, acess https://archlinux.org/mirrorlist/, copy mirrors and use sudo nvim /etc/pacman.d/mirrorlist to customize mirrorlist.
 #
 ## Brazil
-Server = https://mirror.ufscar.br/archlinux/$repo/os/$arch
+#Server = https://mirror.ufscar.br/archlinux/$repo/os/$arch
 ## Brazil
-Server = http://mirror.ufscar.br/archlinux/$repo/os/$arch
+#Server = http://mirror.ufscar.br/archlinux/$repo/os/$arch
 ## Brazil
-Server = http://archlinux.c3sl.ufpr.br/$repo/os/$arch
+#Server = http://archlinux.c3sl.ufpr.br/$repo/os/$arch
 ## Brazil
-Server = http://linorg.usp.br/archlinux/$repo/os/$arch
+#Server = http://linorg.usp.br/archlinux/$repo/os/$arch
 ## Brazil
-Server = http://br.mirror.archlinux-br.org/$repo/os/$arch
+#Server = http://br.mirror.archlinux-br.org/$repo/os/$arch
 }
 install_yay_and_paru () {
 	sudo pacman -S git base-devel --noconfirm
