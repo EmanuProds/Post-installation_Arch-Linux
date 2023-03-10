@@ -119,7 +119,7 @@ install_plymouth_silent_boot_config_grub () {
 	git clone https://github.com/AdisonCavani/distro-grub-themes.git
 	sudo nvim /etc/mkinitcpio.conf
 # add:
-# 	MODULES="amdgpu"        
+# 	MODULES="btrfs i915"        
 # 	HOOKS=(base udev systemd sd-plymouth ... filesystems resume fsck)
 	sudo nvim /etc/sysctl.d/20-quiet-printk.conf
 # add "kernel.printk = 3 3 3 3" in end-line.
