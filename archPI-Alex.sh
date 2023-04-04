@@ -194,18 +194,13 @@ remove_startup_beep () {
 	sudo nvim /etc/modprobe.d/nobeep.conf
 # add "blacklist pcspkr" in end-line.
 }
-re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF () {
-	sudo rfkill unblock bluetooth
-	sudo systemctl enable bluetooth
-	sudo systemctl start bluetooth
-}
 re-enable_GNOME_battery_consumption_modes-43 () {
 	sudo pacman -S power-profiles-daemon --noconfirm
 }
 install_apps () {
 	sudo pacman -S gnome-sound-recorder gnome-boxes --noconfirm
-	paru -S menulibre goverlay-bin freedownloadmanager gdm-settings adwaita-qt6 adwaita-qt5 gthumb qt6ct gparted python-librosa webapp-manager epson-inkjet-printer-escpr
-	flatpak install flathub io.github.Foldex.AdwSteamGtk com.github.unrud.VideoDownloader com.obsproject.Studio org.gimp.GIMP com.github.tchx84.Flatseal com.heroicgameslauncher.hgl net.davidotek.pupgui2 com.github.neithern.g4music com.discordapp.Discord com.valvesoftware.Steam org.libreoffice.LibreOffice com.mattjakeman.ExtensionManager net.lutris.Lutris net.pcsx2.PCSX2 org.citra_emu.citra org.yuzu_emu.yuzu net.brinkervii.grapejuice com.valvesoftware.Steam.Utility.MangoHud org.freedesktop.Platform.VulkanLayer.MangoHud org.gnome.World.PikaBackup -y
+	paru -S menulibre freedownloadmanager gdm-settings adwaita-qt6 adwaita-qt5 gthumb qt6ct gparted python-librosa epson-inkjet-printer-escpr
+	flatpak install flathub io.github.Foldex.AdwSteamGtk com.github.unrud.VideoDownloader org.gimp.GIMP com.heroicgameslauncher.hgl net.davidotek.pupgui2 com.github.neithern.g4music com.discordapp.Discord com.valvesoftware.Steam com.mattjakeman.ExtensionManager net.lutris.Lutris net.pcsx2.PCSX2 org.citra_emu.citra org.yuzu_emu.yuzu com.valvesoftware.Steam.Utility.MangoHud org.freedesktop.Platform.VulkanLayer.MangoHud net.rpcs3.RPCS3 org.gnome.World.PikaBackup -y
 #
 # put the apps you want to install together here.
 # after installing the "Extension Manager", install your favorites extensions.
@@ -251,7 +246,7 @@ finalization () {
 create_temporary_post_install_folder
 add_multilib_repository_color_cache_cleaner
 install_yay
-install_zsh_terminal-customizations
+#install_zsh_terminal-customizations
 install_themes_wallpapers_and_extensions
 install_qt5ct
 install_plymouth_silent_boot_config_grub
@@ -262,7 +257,6 @@ install_lutris_and_dependencies
 install_remaining_drivers_and_dependencies
 add_locales
 remove_startup_beep
-re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF
 re-enable_GNOME_battery_consumption_modes-43
 install_apps
 create_zramd
