@@ -180,14 +180,16 @@ install_games_dependencies () {
 install_remaining_drivers_and_dependencies () {
 	sudo pacman -S bluez-utils libgda foomatic-db foomatic-db-engine foomatic-db-gutenprint-ppds foomatic-db-nonfree-ppds foomatic-db-ppds fprintd gutenprint libfprint system-config-printer cups cups-pdf bluez-cups print-manager sane-airscan sane-gt68xx-firmware noto-fonts ttf-bitstream-vera ttf-croscore ttf-dejavu ttf-droid ttf-ibm-plex ttf-liberation inter-font gtk2 openjdk-src jdk-openjdk jre-openjdk-headless jre-openjdk gvfs-goa gvfs-google mtpfs gvfs-mtp gvfs-gphoto2 bash-completion ffmpegthumbnailer ffmpegthumbs noto-fonts-emoji ntfs-3g android-tools unrar libquvi faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore ffmpeg ffmpeg4.4 gst-plugins-ugly gst-plugins-good gst-plugins-base gst-plugins-bad gst-libav gstreamer fwupd gnome-firmware gufw ufw-extras apparmor --noconfirm
 	sudo systemctl enable --now cups
-	sudo usermod -aG lp emanuel
-	sudo usermod -aG saned,scanner emanuel
+	sudo usermod -aG lp "user.name"
+	sudo usermod -aG saned,scanner "user.name"
+# add in "user.name" your name profile on system
 }
 install_virt-manager () {
 	sudo pacman -S iptables-nft qemu dnsmasq libvirt bridge-utils openbsd-netcat virt-manager
 	sudo systemctl enable libvirtd
  	sudo systemctl enable dnsmasq
- 	sudo gpasswd -a emanuel libvirt
+ 	sudo gpasswd -a "user.name" libvirt
+# add in "user.name" your name profile on system too
 }
 add_locales () {
 	sudo nvim /etc/locale.gen
@@ -207,30 +209,6 @@ re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF () {
 re-enable_GNOME_battery_consumption_modes-43 () {
 	sudo pacman -S power-profiles-daemon --noconfirm
 }
-install_apps () {
-	sudo pacman -S gnome-sound-recorder gnome-boxes --noconfirm
-	yay -S gdm-settings adwaita-qt6 adwaita-qt5 qt6ct python-librosa epson-inkjet-printer-escpr
-	flatpak install flathub org.libreoffice.LibreOffice app/io.github.Foldex.AdwSteamGtk app/com.github.unrud.VideoDownloader app/com.obsproject.Studio app/org.gimp.GIMP app/org.inkscape.Inkscape app/com.github.tchx84.Flatseal app/app.drey.Dialect app/com.heroicgameslauncher.hgl app/com.github.neithern.g4music app/org.audacityteam.Audacity app/org.kde.kdenlive app/org.telegram.desktop app/de.shorsh.discord-screenaudio app/com.valvesoftware.Steam app/com.bitwarden.desktop app/org.duckstation.DuckStation app/net.pcsx2.PCSX2 app/org.yuzu_emu.yuzu app/io.mgba.mGBA app/net.brinkervii.grapejuice org.ryujinx.Ryujinx app/io.github.realmazharhussain.GdmSettings app/com.carpeludum.KegaFusion app/com.snes9x.Snes9x app/org.DolphinEmu.dolphin-emu app/net.veloren.airshipper app/com.microsoft.Edge app/com.vysp3r.ProtonPlus -y
-# put the apps you want to install together here.
-# after installing the "Extension Manager", install your favorites extensions.
-#	Alphabetical Grid Extension
-#	Appindicator
-#	Arcmenu 
-#	Awesome Tiles
-#	Bluetooth-quick-connect
-#	Caffeine
-#	Color Picker
-#	Custom Accent Colors
-#	Dash-to-dock
-#	Gnome 4x UI Improvements
-#	Gsconnect 
-#	GTK Title Bar 
-#	Just Perfection
-#	Panel-corners
-#	Rounded-window-corners
-#	X11 Gestures (need install Touchegg)
-#	[QSTweak] Quick Settings Tweaker 
-}
 create_zramd () {
 	yay -S zramd --noconfirm
 	sudo nvim /etc/default/zramd
@@ -240,17 +218,13 @@ create_zramd () {
 refresh_keys_to_remove_lags_in_system () {
 	sudo pacman-key --refresh-keys
 }
-bugs_corrections () {
-	nvim ~/.config/mimeapps.list
-# add "inode/directory=org.gnome.Nautilus.desktop" in [Default Applications] line, to remove visual studio code for default.
-}
 install_cache_remove_and_remove_temporary_files () {
 	sudo pacman -S pacman-contrib --noconfirm
-	sudo pacman -Rsc gnome-contacts gnome-music htop vim epiphany gnome-maps eog
-#	sudo pacman -Sc --noconfirm
-#	sudo paccache -r --noconfirm
-#	paccache -ruk0 --noconfirm
-#	sudo flatpak uninstall --unused
+	sudo pacman -Rsc gnome-contacts htop vim epiphany
+	sudo pacman -Sc --noconfirm
+	sudo paccache -r --noconfirm
+	paccache -ruk0 --noconfirm
+	sudo flatpak uninstall --unused
 	cd ..
 	rm -rf /.tmp
 }
@@ -265,21 +239,19 @@ add_multilib_repository_color_cache_cleaner
 install_yay_and_paru
 install_zsh_terminal-customizations
 install_themes_wallpapers_and_extensions
-install_qt5ct
+install_qt5-6ct
 install_plymouth_silent_boot_config_grub
 install_video_drivers_add-ons
 app_store
 install_wine_staging_and_dependencies
 install_games_dependencies
 install_remaining_drivers_and_dependencies
-#install_virt-manager
+install_virt-manager
 add_locales
 remove_startup_beep
 re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF
 re-enable_GNOME_battery_consumption_modes-43
-install_apps
-#create_zramd
-#refresh_keys_to_remove_lags_in_system
-#bugs_corrections
+create_zramd
+refresh_keys_to_remove_lags_in_system
 install_cache_remove_and_remove_temporary_files
 finalization
