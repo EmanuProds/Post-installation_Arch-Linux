@@ -29,6 +29,11 @@
 #   bash 5.1.016-3
 #   zsh 5.9-3
 # ------------------------------------------------------------------------ #
+
+# Get the directory where the script is located
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+DATA_DIR="$SCRIPT_DIR/data/archPI.sh"
+
 DIRETORY_TEMP='$HOME/.tpm/'
 DIRETORY_DOWNLOAD='$HOME/Downloads/'
 create_temporary_post_install_folder () {
@@ -63,22 +68,51 @@ Server = http://linorg.usp.br/archlinux/$repo/os/$arch
 Server = http://br.mirror.archlinux-br.org/$repo/os/$arch
 }
 install_yay () {
-	sudo pacman -S git base-devel --noconfirm
+    if [[ -f "$DATA_DIR/install_yay_pacman_dependencies.txt" ]]; then
+        echo "Installing pacman dependencies for yay..."
+        sudo pacman -S --noconfirm --needed $(cat "$DATA_DIR/install_yay_pacman_dependencies.txt" | xargs)
+    else
+        echo "ERROR: $DATA_DIR/install_yay_pacman_dependencies.txt not found."
+        return 1
+    fi
 	git clone https://aur.archlinux.org/yay.git 
 	cd yay
-	makepkg -si
+	makepkg -si --noconfirm
 	yay -Y --gendb
 	cd ..
 	sudo rm -rf yay/
-	sudo nano /etc/makepkg.conf
+	echo " ATTENTION: Remember to manually edit /etc/makepkg.conf to set MAKEFLAGS for parallel compilation."
+	echo " Example: uncomment #MAKEFLAGS=\"-j2\" and adjust the number of cores (e.g., -j$(nproc))"
+	read -p "Press Enter to continue after acknowledging makepkg.conf reminder..."
+#   sudo nano /etc/makepkg.conf
 # uncomment and add "j" (OBS.: beside the "J", add half of your processor's total cpu cores.
 #   MAKEFLAGS="-j6"
 }
 install_zsh_terminal-customizations () {
-	sudo pacman -S zsh yarn npm zsh-history-substring-search zsh-syntax-highlighting zsh-autosuggestions zsh-theme-powerlevel10k powerline-fonts awesome-terminal-fonts ttf-meslo-nerd --noconfirm
-	yay -S --noconfirm asdf-vm
+    if [[ -f "$DATA_DIR/install_zsh_terminal_customizations_pacman.txt" ]]; then
+        echo "Installing ZSH customizations (pacman)..."
+        sudo pacman -S --noconfirm --needed $(cat "$DATA_DIR/install_zsh_terminal_customizations_pacman.txt" | xargs)
+    else
+        echo "ERROR: $DATA_DIR/install_zsh_terminal_customizations_pacman.txt not found."
+    fi
+
+    if command -v yay &> /dev/null && [[ -f "$DATA_DIR/install_zsh_terminal_customizations_yay.txt" ]]; then
+        echo "Installing ZSH customizations (yay)..."
+        yay -S --noconfirm --needed $(cat "$DATA_DIR/install_zsh_terminal_customizations_yay.txt" | xargs)
+    else
+        if ! command -v yay &> /dev/null; then echo "WARNING: yay command not found, skipping yay packages for ZSH."; fi
+        if [[ ! -f "$DATA_DIR/install_zsh_terminal_customizations_yay.txt" ]]; then echo "ERROR: $DATA_DIR/install_zsh_terminal_customizations_yay.txt not found."; fi
+    fi
+
 #	echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >> ~/.zshrc
-	cargo install bat exa procs tokei ytop tealdeer grex rmesg zoxide   
+
+    if command -v cargo &> /dev/null && [[ -f "$DATA_DIR/install_zsh_terminal_customizations_cargo.txt" ]]; then
+        echo "Installing ZSH customizations (cargo)..."
+        cargo install $(cat "$DATA_DIR/install_zsh_terminal_customizations_cargo.txt" | xargs)
+    else
+        if ! command -v cargo &> /dev/null; then echo "WARNING: cargo command not found, skipping cargo packages for ZSH."; fi
+        if [[ ! -f "$DATA_DIR/install_zsh_terminal_customizations_cargo.txt" ]]; then echo "ERROR: $DATA_DIR/install_zsh_terminal_customizations_cargo.txt not found."; fi
+    fi
 # edit .zshrc include this parameters.
 # Zsh plugins.
 #   source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-history-substring-search.zsh
@@ -86,13 +120,39 @@ install_zsh_terminal-customizations () {
 #   source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 # LunarVim dependence.
 #   export PATH=~/.cargo/bin:~/.local/bin:$PATH
+    echo " ATTENTION: Remember to manually configure your .zshrc with desired plugins and PATH."
+    echo " Example ZSH plugin lines:"
+    echo "   source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-history-substring-search.zsh"
+    echo "   source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+    echo "   source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    echo " Example PATH for LunarVim/cargo:"
+    echo "   export PATH=~/.cargo/bin:~/.local/bin:\$PATH"
+    read -p "Press Enter to continue after acknowledging .zshrc reminder..."
 }
 install_themes_wallpapers_and_extensions () {
-	yay -S --noconfirm adw-gtk-theme adwaita-dark xcursor-simp1e-mix-dark archlinux-artwork
-	sudo pacman -S file-roller papirus-icon-theme --noconfirm
-	yay -S --noconfirm papirus-folders
-	sudo papirus-folders -C yellow --theme Papirus-Dark
-	mkdir ~/.themes
+    if command -v yay &> /dev/null && [[ -f "$DATA_DIR/install_themes_wallpapers_extensions_yay.txt" ]]; then
+        echo "Installing themes, wallpapers, and extensions (yay)..."
+        yay -S --noconfirm --needed $(cat "$DATA_DIR/install_themes_wallpapers_extensions_yay.txt" | xargs)
+    else
+        if ! command -v yay &> /dev/null; then echo "WARNING: yay command not found, skipping yay packages for themes."; fi
+        if [[ ! -f "$DATA_DIR/install_themes_wallpapers_extensions_yay.txt" ]]; then echo "ERROR: $DATA_DIR/install_themes_wallpapers_extensions_yay.txt not found."; fi
+    fi
+
+    if [[ -f "$DATA_DIR/install_themes_wallpapers_extensions_pacman.txt" ]]; then
+        echo "Installing themes, wallpapers, and extensions (pacman)..."
+        sudo pacman -S --noconfirm --needed $(cat "$DATA_DIR/install_themes_wallpapers_extensions_pacman.txt" | xargs)
+    else
+        echo "ERROR: $DATA_DIR/install_themes_wallpapers_extensions_pacman.txt not found."
+    fi
+
+	# The papirus-folders command was moved to be after installing papirus-icon-theme (pacman) and papirus-folders (yay)
+	if command -v papirus-folders &> /dev/null; then
+		sudo papirus-folders -C yellow --theme Papirus-Dark
+	else
+		echo "WARNING: papirus-folders command not found. Skipping color configuration."
+	fi
+
+	mkdir -p ~/.themes # Use -p to avoid error if directory exists
 	cd /usr/share/themes
 	sudo cp -fR Adw Adw-dark adw-gtk3 adw-gtk3-dark ~/.themes
 	sudo flatpak override --filesystem=$HOME/.themes
@@ -192,14 +252,46 @@ install_virt-manager () {
 # add in "user.name" your name profile on system too
 }
 add_locales () {
-	sudo nvim /etc/locale.gen
-# add pt_BR.UTF-8 UTF-8 in end-line.
-	sudo locale-gen
+    if [[ ! -f "$DATA_DIR/add_locales_content.txt" ]]; then
+        echo "ERROR: $DATA_DIR/add_locales_content.txt not found."
+        return 1
+    fi
+
+    echo "Configuring locales..."
+    changed_locales=0
+    while IFS= read -r locale_line; do
+        if [[ -n "$locale_line" ]] && ! grep -Fxq "$locale_line" /etc/locale.gen; then
+            echo "Adding locale: $locale_line"
+            echo "$locale_line" | sudo tee -a /etc/locale.gen > /dev/null
+            changed_locales=1
+        else
+            echo "Locale already present or line empty: $locale_line"
+        fi
+    done < "$DATA_DIR/add_locales_content.txt"
+
+    if [[ "$changed_locales" -eq 1 ]]; then
+        echo "Generating locales..."
+        sudo locale-gen
+    else
+        echo "No new locales added. Skipping locale-gen."
+    fi
 }
 remove_startup_beep () {
 	sudo rmmod pcspkr
-	sudo nvim /etc/modprobe.d/nobeep.conf
-# add "blacklist pcspkr" in end-line.
+    if [[ ! -f "$DATA_DIR/remove_startup_beep_content.txt" ]]; then
+        echo "ERROR: $DATA_DIR/remove_startup_beep_content.txt not found."
+        return 1
+    fi
+
+    beep_config_line=$(cat "$DATA_DIR/remove_startup_beep_content.txt")
+    config_file="/etc/modprobe.d/nobeep.conf"
+
+    if ! grep -Fxq "$beep_config_line" "$config_file" &>/dev/null; then
+        echo "Adding '$beep_config_line' to $config_file"
+        echo "$beep_config_line" | sudo tee "$config_file" > /dev/null
+    else
+        echo "'$beep_config_line' already present in $config_file."
+    fi
 }
 re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF () {
 	sudo rfkill unblock bluetooth

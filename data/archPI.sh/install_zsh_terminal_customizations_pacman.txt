@@ -1,0 +1,10 @@
+zsh
+yarn
+npm
+zsh-history-substring-search
+zsh-syntax-highlighting
+zsh-autosuggestions
+zsh-theme-powerlevel10k
+powerline-fonts
+awesome-terminal-fonts
+ttf-meslo-nerd

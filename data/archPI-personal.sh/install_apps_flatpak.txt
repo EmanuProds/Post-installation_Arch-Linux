@@ -1,0 +1,12 @@
+app/com.obsproject.Studio
+app/org.gimp.GIMP
+app/org.inkscape.Inkscape
+app/com.github.tchx84.Flatseal
+app/app.drey.Dialect
+app/com.heroicgameslauncher.hgl
+tenacity
+app/org.kde.kdenlive
+app/org.telegram.desktop
+app/com.bitwarden.desktop
+app/com.microsoft.Edge
+app/com.vysp3r.ProtonPlus

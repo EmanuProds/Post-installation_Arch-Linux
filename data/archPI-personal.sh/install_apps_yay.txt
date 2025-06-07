@@ -1,0 +1,5 @@
+gdm-settings
+adwaita-qt6
+adwaita-qt5
+qt6ct
+python-librosa

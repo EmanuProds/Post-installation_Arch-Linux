@@ -1,0 +1,9 @@
+bat
+exa
+procs
+tokei
+ytop
+tealdeer
+grex
+rmesg
+zoxide

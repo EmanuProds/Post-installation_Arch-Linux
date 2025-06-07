@@ -29,6 +29,11 @@
 #   bash 5.1.016-3
 #   zsh 5.9-3
 # ------------------------------------------------------------------------ #
+
+# Get the directory where the script is located
+SCRIPT_DIR_PERSONAL=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+DATA_DIR_PERSONAL="$SCRIPT_DIR_PERSONAL/data/archPI-personal.sh"
+
 DIRETORY_TEMP='$HOME/.tpm/'
 DIRETORY_DOWNLOAD='$HOME/Downloads/'
 create_temporary_post_install_folder () {
@@ -187,14 +192,49 @@ install_virt-manager () {
  	sudo gpasswd -a emanuel libvirt
 }
 add_locales () {
-	sudo nano /etc/locale.gen
-# add pt_BR.UTF-8 UTF-8 in end-line.
-	sudo locale-gen
+    if [[ ! -f "$DATA_DIR_PERSONAL/add_locales_content.txt" ]]; then
+        echo "ERROR: $DATA_DIR_PERSONAL/add_locales_content.txt not found."
+        return 1
+    fi
+
+    echo "Configuring locales (personal)..."
+    changed_locales=0
+    while IFS= read -r locale_line; do
+        if [[ -n "$locale_line" ]] && ! grep -Fxq "$locale_line" /etc/locale.gen; then
+            echo "Adding locale: $locale_line"
+            echo "$locale_line" | sudo tee -a /etc/locale.gen > /dev/null
+            changed_locales=1
+        else
+            echo "Locale already present or line empty: $locale_line"
+        fi
+    done < "$DATA_DIR_PERSONAL/add_locales_content.txt"
+
+    if [[ "$changed_locales" -eq 1 ]]; then
+        echo "Generating locales..."
+        sudo locale-gen
+    else
+        echo "No new locales added. Skipping locale-gen."
+    fi
 }
 remove_startup_beep () {
-	sudo rmmod pcspkr
-	sudo nano /etc/modprobe.d/nobeep.conf
-# add "blacklist pcspkr" in end-line.
+    sudo rmmod pcspkr
+    config_file="/etc/modprobe.d/nobeep.conf"
+    data_file="$DATA_DIR_PERSONAL/remove_startup_beep_content.txt"
+
+    if [[ ! -f "$data_file" ]]; then
+        echo "ERROR: $data_file not found."
+        echo "Please create it with the content 'blacklist pcspkr'."
+        return 1
+    fi
+
+    beep_config_line=$(cat "$data_file")
+
+    if ! grep -Fxq "$beep_config_line" "$config_file" &>/dev/null; then
+        echo "Adding '$beep_config_line' to $config_file"
+        echo "$beep_config_line" | sudo tee "$config_file" > /dev/null
+    else
+        echo "'$beep_config_line' already present in $config_file."
+    fi
 }
 re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF () {
 	sudo rfkill unblock bluetooth
@@ -205,9 +245,37 @@ re-enable_GNOME_battery_consumption_modes-43 () {
 	sudo pacman -S power-profiles-daemon --noconfirm
 }
 install_apps () {
-	sudo pacman -S gnome-sound-recorder --noconfirm
-	yay -S gdm-settings adwaita-qt6 adwaita-qt5 qt6ct python-librosa
-	flatpak install flathub app/com.obsproject.Studio app/org.gimp.GIMP app/org.inkscape.Inkscape app/com.github.tchx84.Flatseal app/app.drey.Dialect app/com.heroicgameslauncher.hgl tenacity app/org.kde.kdenlive app/org.telegram.desktop app/com.bitwarden.desktop app/com.microsoft.Edge app/com.vysp3r.ProtonPlus -y
+    # Pacman packages
+    if [[ -f "$DATA_DIR_PERSONAL/install_apps_pacman.txt" ]]; then
+        echo "Installing apps (pacman)..."
+        sudo pacman -S --noconfirm --needed $(cat "$DATA_DIR_PERSONAL/install_apps_pacman.txt" | xargs)
+    else
+        echo "INFO: $DATA_DIR_PERSONAL/install_apps_pacman.txt not found. Skipping pacman apps."
+    fi
+
+    # Yay packages
+    if command -v yay &> /dev/null && [[ -f "$DATA_DIR_PERSONAL/install_apps_yay.txt" ]]; then
+        echo "Installing apps (yay)..."
+        yay -S --noconfirm --needed $(cat "$DATA_DIR_PERSONAL/install_apps_yay.txt" | xargs)
+    else
+        if ! command -v yay &> /dev/null; then echo "WARNING: yay command not found, skipping yay apps."; fi
+        if [[ ! -f "$DATA_DIR_PERSONAL/install_apps_yay.txt" ]]; then echo "INFO: $DATA_DIR_PERSONAL/install_apps_yay.txt not found. Skipping yay apps."; fi
+    fi
+
+    # Flatpak packages
+    if command -v flatpak &> /dev/null && [[ -f "$DATA_DIR_PERSONAL/install_apps_flatpak.txt" ]]; then
+        echo "Installing apps (flatpak)..."
+        # xargs without -r will run flatpak install even with empty input, so check if file has content
+        if [[ -s "$DATA_DIR_PERSONAL/install_apps_flatpak.txt" ]]; then
+            flatpak install flathub $(cat "$DATA_DIR_PERSONAL/install_apps_flatpak.txt" | xargs) -y
+        else
+            echo "INFO: $DATA_DIR_PERSONAL/install_apps_flatpak.txt is empty. Skipping flatpak apps."
+        fi
+    else
+        if ! command -v flatpak &> /dev/null; then echo "WARNING: flatpak command not found, skipping flatpak apps."; fi
+        if [[ ! -f "$DATA_DIR_PERSONAL/install_apps_flatpak.txt" ]]; then echo "INFO: $DATA_DIR_PERSONAL/install_apps_flatpak.txt not found. Skipping flatpak apps."; fi
+    fi
+
 # put the apps you want to install together here.
 # after installing the "Extension Manager", install your favorites extensions.
 #	Alphabetical Grid Extension

@@ -1,0 +1,5 @@
+adw-gtk-theme
+adwaita-dark
+xcursor-simp1e-mix-dark
+archlinux-artwork
+papirus-folders
