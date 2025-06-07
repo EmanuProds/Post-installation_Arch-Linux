@@ -49,7 +49,7 @@ add_multilib_repository_color_cache_cleaner () {
 	sudo pacman -Sy --needed --noconfirm curl rsync reflector git
 	sudo reflector --country BR --sort rate --save /etc/pacman.d/mirrorlist
 #	sudo reflector -c brazil -f 5 --save /etc/pacman.d/mirrorlist
-# if necessary, acess https://archlinux.org/mirrorlist/, copy mirrors and use sudo nvim /etc/pacman.d/mirrorlist to customize mirrorlist.
+# if necessary, acess https://archlinux.org/mirrorlist/, copy mirrors and use sudo nano /etc/pacman.d/mirrorlist to customize mirrorlist.
 #
 ## Brazil
 Server = https://mirror.ufscar.br/archlinux/$repo/os/$arch
@@ -88,14 +88,12 @@ install_zsh_terminal-customizations () {
 #   export PATH=~/.cargo/bin:~/.local/bin:$PATH
 }
 install_themes_wallpapers_and_extensions () {
-	yay -S --noconfirm adw-gtk-theme adwaita-dark xcursor-simp1e-mix-dark archlinux-artwork
-	sudo pacman -S file-roller papirus-icon-theme --noconfirm
-	yay -S --noconfirm papirus-folders
-	sudo papirus-folders -C yellow --theme Papirus-Dark
+	yay -S --noconfirm adw-gtk-theme xcursor-simp1e-mix-ligth xcursor-simp1e-mix-dark archlinux-artwork papirus-folders file-roller papirus-icon-theme
+	sudo papirus-folders -C blue --theme Papirus
 	mkdir ~/.themes
 	cd /usr/share/themes
 	sudo cp -fR Adw Adw-dark adw-gtk3 adw-gtk3-dark ~/.themes
-	sudo flatpak override --filesystem=$HOME/.themes
+	sudo flatpak override --filesystem=~/.themes
 	sudo flatpak override --env=GTK_THEME=Adw-dark
 	cd DIRETORY_TEMP
 	git clone https://github.com/rafaelmardojai/firefox-gnome-theme && cd firefox-gnome-theme
@@ -104,19 +102,19 @@ install_themes_wallpapers_and_extensions () {
 }
 install_qt5-6ct () {
 	sudo pacman -S qt5ct qt6ct --noconfirm
-	sudo nvim /etc/environment
+	sudo nano /etc/environment
 # add "QT_QPA_PLATFORMTHEME=qt5ct" in end-line. 
 }
 install_plymouth_silent_boot_config_grub () {
-	yay -S plymouth gdm-plymouth plymouth-theme-arch-charge-big
+	yay -S plymouth plymouth-theme-arch-charge-big
 	sudo git clone https://github.com/AdisonCavani/distro-grub-themes.git
-	sudo nvim /etc/mkinitcpio.conf
+	sudo nano /etc/mkinitcpio.conf
 # add:
 # 	MODULES="amdgpu"        
 # 	HOOKS=(base udev systemd plymouth ... filesystems resume fsck)
-	sudo nvim /etc/sysctl.d/20-quiet-printk.conf
+	sudo nano /etc/sysctl.d/20-quiet-printk.conf
 # add "kernel.printk = 3 3 3 3" in end-line.
-	sudo nvim /etc/default/grub
+	sudo nano /etc/default/grub
 # add:
 #   GRUB_DEFAULT=“0”
 #	GRUB_TIMEOUT=“0”
@@ -148,13 +146,13 @@ install_plymouth_silent_boot_config_grub () {
 # set "DeviceTimeout=5" in end-line
 #
 	sudo plymouth-set-default-theme -R arch-charge-big
-	sudo mkinitcpio -P linux; sudo grub-mkconfig -o /boot/grub/grub.cfg
+	sudo mkinitcpio -P; sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 install_video_drivers_add-ons () {
 # uncomment the respective brand of your video card.
 #
 # Nvidia
-#	sudo pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm		
+#	sudo pacman -S --needed nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm		
 # AMD
 	sudo pacman -S --needed lib32-mesa vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 # Intel
@@ -166,8 +164,7 @@ app_store () {
 #	yay -S pamac-flatpak-gnome
 }
 install_wine_staging_and_dependencies () {
-	sudo pacman -S wine-stable winetricks wine-mono wine-gecko --noconfirm
-	sudo pacman -S --needed wine-stable giflib lib32-giflib libpng lib32-libpng libldap lib32-libldap gnutls lib32-gnutls \
+	sudo pacman -S --needed wine-staging winetricks wine-mono wine-gecko giflib lib32-giflib libpng lib32-libpng libldap lib32-libldap gnutls lib32-gnutls \
 mpg123 lib32-mpg123 openal lib32-openal v4l-utils lib32-v4l-utils libpulse lib32-libpulse libgpg-error \
 lib32-libgpg-error alsa-plugins lib32-alsa-plugins alsa-lib lib32-alsa-lib libjpeg-turbo lib32-libjpeg-turbo \
 sqlite lib32-sqlite libxcomposite lib32-libxcomposite libxinerama lib32-libgcrypt libgcrypt lib32-libxinerama \
@@ -175,10 +172,10 @@ ncurses lib32-ncurses opencl-icd-loader lib32-opencl-icd-loader libxslt lib32-li
 lib32-gtk3 gst-plugins-base-libs lib32-gst-plugins-base-libs vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 }
 install_games_dependencies () {
-	sudo pacman -S zenity gcc-libs gnutls vulkan-validation-layers vulkan-radeon vulkan-icd-loader libva fontconfig lcms2 libxml2 libxcursor libxrandr libxdamage libxi gettext freetype2 glu libsm libpcap faudio giflib libpng libldap mpg123 openal v4l-utils libpulse alsa-lib alsa-plugins libjpeg-turbo libxcomposite libxinerama ocl-icd libxslt gst-plugins-base-libs vkd3d sdl2 sdl2_ttf sdl2_image sdl2_net libcups libidn11 pixman zlib mesa ncurses krb5 libxcb cairo libx11 libx86emu libxss libgphoto2 sane noto-fonts-emoji lib32-glibc lib32-gcc-libs lib32-gnutls lib32-vulkan-validation-layers lib32-vulkan-intel lib32-vulkan-radeon lib32-vulkan-icd-loader lib32-libva lib32-fontconfig lib32-lcms2 lib32-libxml2 lib32-libxcursor lib32-libxrandr lib32-libxdamage lib32-libxi lib32-gettext lib32-freetype2 lib32-glu lib32-libsm lib32-faudio lib32-libpcap lib32-giflib lib32-libpng lib32-libldap lib32-mpg123 lib32-openal lib32-v4l-utils lib32-libpulse lib32-alsa-lib lib32-alsa-plugins lib32-libjpeg-turbo lib32-libxcomposite lib32-libxinerama lib32-ocl-icd lib32-libxslt lib32-gst-plugins-base-libs lib32-vkd3d lib32-sdl2 lib32-sdl2_ttf lib32-sdl2_image lib32-libcups lib32-libidn11 lib32-pixman lib32-zlib lib32-mesa lib32-cairo lib32-libx11 lib32-libxcb lib32-krb5 lib32-ncurses lib32-libxss gamemode lib32-gamemode --noconfirm
+	sudo pacman -S zenity gcc-libs gnutls vulkan-validation-layers vulkan-radeon vulkan-icd-loader libva fontconfig lcms2 libxml2 libxcursor libxrandr libxdamage libxi gettext freetype2 glu libsm libpcap giflib libpng libldap mpg123 openal v4l-utils libpulse alsa-lib alsa-plugins libjpeg-turbo libxcomposite libxinerama ocl-icd libxslt gst-plugins-base-libs vkd3d sdl2 sdl2_ttf sdl2_image sdl2_net libcups libidn11 pixman zlib mesa ncurses krb5 libxcb cairo libx11 libx86emu libxss libgphoto2 sane noto-fonts-emoji lib32-glibc lib32-gcc-libs lib32-gnutls lib32-vulkan-validation-layers lib32-vulkan-radeon lib32-vulkan-icd-loader lib32-libva lib32-fontconfig lib32-lcms2 lib32-libxml2 lib32-libxcursor lib32-libxrandr lib32-libxdamage lib32-libxi lib32-gettext lib32-freetype2 lib32-glu lib32-libsm lib32-libpcap lib32-giflib lib32-libpng lib32-libldap lib32-mpg123 lib32-openal lib32-v4l-utils lib32-libpulse lib32-alsa-lib lib32-alsa-plugins lib32-libjpeg-turbo lib32-libxcomposite lib32-libxinerama lib32-ocl-icd lib32-libxslt lib32-gst-plugins-base-libs lib32-vkd3d lib32-sdl2 lib32-sdl2_ttf lib32-sdl2_image lib32-libcups lib32-libidn11 lib32-pixman lib32-zlib lib32-mesa lib32-cairo lib32-libx11 lib32-libxcb lib32-krb5 lib32-ncurses lib32-libxss gamemode lib32-gamemode --noconfirm
 }
 install_remaining_drivers_and_dependencies () {
-	sudo pacman -S bluez-utils libgda foomatic-db foomatic-db-engine foomatic-db-gutenprint-ppds foomatic-db-nonfree-ppds foomatic-db-ppds fprintd gutenprint libfprint system-config-printer cups cups-pdf bluez-cups print-manager sane-airscan sane-gt68xx-firmware noto-fonts ttf-bitstream-vera ttf-croscore ttf-dejavu ttf-droid ttf-ibm-plex ttf-liberation inter-font gtk2 openjdk-src jdk-openjdk jre-openjdk-headless jre-openjdk gvfs-goa gvfs-google mtpfs gvfs-mtp gvfs-gphoto2 bash-completion ffmpegthumbnailer ffmpegthumbs noto-fonts-emoji ntfs-3g android-tools unrar libquvi faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore ffmpeg ffmpeg4.4 gst-plugins-ugly gst-plugins-good gst-plugins-base gst-plugins-bad gst-libav gstreamer fwupd gnome-firmware gufw ufw-extras apparmor --noconfirm
+	sudo pacman -S bluez-utils foomatic-db foomatic-db-engine foomatic-db-gutenprint-ppds foomatic-db-nonfree-ppds foomatic-db-ppds fprintd gutenprint libfprint system-config-printer cups cups-pdf bluez-cups print-manager sane-airscan sane-gt68xx-firmware noto-fonts ttf-bitstream-vera ttf-croscore ttf-dejavu ttf-droid ttf-ibm-plex ttf-liberation inter-font jre-openjdk gvfs-goa gvfs-google mtpfs gvfs-mtp gvfs-gphoto2 bash-completion ffmpegthumbnailer ffmpegthumbs noto-fonts-emoji ntfs-3g android-tools unrar libquvi faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv opus wavpack x264 xvidcore ffmpeg ffmpeg4.4 gst-plugins-ugly gst-plugins-good gst-plugins-base gst-plugins-bad gst-libav gstreamer fwupd gnome-firmware gufw ufw-extras apparmor --noconfirm
 	sudo systemctl enable --now cups
 	sudo usermod -aG lp emanuel
 	sudo usermod -aG saned,scanner emanuel
@@ -190,13 +187,13 @@ install_virt-manager () {
  	sudo gpasswd -a emanuel libvirt
 }
 add_locales () {
-	sudo nvim /etc/locale.gen
+	sudo nano /etc/locale.gen
 # add pt_BR.UTF-8 UTF-8 in end-line.
 	sudo locale-gen
 }
 remove_startup_beep () {
 	sudo rmmod pcspkr
-	sudo nvim /etc/modprobe.d/nobeep.conf
+	sudo nano /etc/modprobe.d/nobeep.conf
 # add "blacklist pcspkr" in end-line.
 }
 re-enable_bluetooth_in_systemctl-bug_fix_in_Lenovo_IdeaPad-3_82MF () {
@@ -208,9 +205,9 @@ re-enable_GNOME_battery_consumption_modes-43 () {
 	sudo pacman -S power-profiles-daemon --noconfirm
 }
 install_apps () {
-	sudo pacman -S gnome-sound-recorder gnome-boxes --noconfirm
-	yay -S gdm-settings adwaita-qt6 adwaita-qt5 qt6ct python-librosa epson-inkjet-printer-escpr
-	flatpak install flathub org.libreoffice.LibreOffice app/io.github.Foldex.AdwSteamGtk app/com.github.unrud.VideoDownloader app/com.obsproject.Studio app/org.gimp.GIMP app/org.inkscape.Inkscape app/com.github.tchx84.Flatseal app/app.drey.Dialect app/com.heroicgameslauncher.hgl app/com.github.neithern.g4music app/org.audacityteam.Audacity app/org.kde.kdenlive app/org.telegram.desktop app/de.shorsh.discord-screenaudio app/com.valvesoftware.Steam app/com.bitwarden.desktop app/org.duckstation.DuckStation app/net.pcsx2.PCSX2 app/org.yuzu_emu.yuzu app/io.mgba.mGBA app/net.brinkervii.grapejuice org.ryujinx.Ryujinx app/io.github.realmazharhussain.GdmSettings app/com.carpeludum.KegaFusion app/com.snes9x.Snes9x app/org.DolphinEmu.dolphin-emu app/net.veloren.airshipper app/com.microsoft.Edge app/com.vysp3r.ProtonPlus -y
+	sudo pacman -S gnome-sound-recorder --noconfirm
+	yay -S gdm-settings adwaita-qt6 adwaita-qt5 qt6ct python-librosa
+	flatpak install flathub app/com.obsproject.Studio app/org.gimp.GIMP app/org.inkscape.Inkscape app/com.github.tchx84.Flatseal app/app.drey.Dialect app/com.heroicgameslauncher.hgl tenacity app/org.kde.kdenlive app/org.telegram.desktop app/com.bitwarden.desktop app/com.microsoft.Edge app/com.vysp3r.ProtonPlus -y
 # put the apps you want to install together here.
 # after installing the "Extension Manager", install your favorites extensions.
 #	Alphabetical Grid Extension
@@ -233,7 +230,7 @@ install_apps () {
 }
 create_zramd () {
 	yay -S zramd --noconfirm
-	sudo nvim /etc/default/zramd
+	sudo nano /etc/default/zramd
 # add in "Max total swap size" in "MAX_SIZE=8192"
 	sudo systemctl enable --now zramd.service
 }
@@ -241,7 +238,7 @@ refresh_keys_to_remove_lags_in_system () {
 	sudo pacman-key --refresh-keys
 }
 bugs_corrections () {
-	nvim ~/.config/mimeapps.list
+	nano ~/.config/mimeapps.list
 # add "inode/directory=org.gnome.Nautilus.desktop" in [Default Applications] line, to remove visual studio code for default.
 }
 install_cache_remove_and_remove_temporary_files () {
