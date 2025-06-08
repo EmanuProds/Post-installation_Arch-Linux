@@ -133,7 +133,7 @@ gnome_app_store () {
 }
 install_apps () {
 	paru -S --noconfirm extension-manager showtime gradia 
-	paru -S --noconfirm remmina rustdesk-bin anydesk-bin heimdall scrcpy papers paper-clip valuta foliate zen-browser-bin code zed
+	paru -S --noconfirm remmina rustdesk-bin anydesk-bin heimdall scrcpy papers paper-clip valuta foliate zen-browser-bin code zed varia celeste-client-bin microsoft-edge-stable-bin
 	paru -S --noconfirm gimp inkscape tenacity eyedropper
 	paru -S --noconfirm waydroid waydroid-image-gapps
 	paru -S --noconfirm jre8 gdm-settings
