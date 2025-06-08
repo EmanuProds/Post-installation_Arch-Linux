@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=ArchPI Configurator
 Comment=Configure and run Arch Linux post-installation scripts
-Exec=gjs main.js
-Icon=system-run
+# O Exec será ajustado pelo PKGBUILD para o caminho de instalação.
+# Placeholder para o PKGBUILD substituir:
+Exec=python main_python.py
+Icon=system-run # Considere adicionar um ícone customizado ao projeto depois
 Terminal=false
 Type=Application
 Categories=GTK;GNOME;System;Utility;
