@@ -123,10 +123,7 @@ games_dependencies () {
 }
 install_apps () {
 	paru -S --noconfirm showtime
-	paru -S --noconfirm heimdall scrcpy papers paper-clip lmstudio zed
-	~/.lmstudio/bin/lms bootstrap
-# to start use AI in zed IDE, use this command in terminal:	lms server start
-	paru -S --noconfirm gimp inkscape tenacity eyedropper
+	paru -S --noconfirm heimdall scrcpy papers
 	paru -S --noconfirm waydroid waydroid-image-gapps unified-remote-server
 	nano /etc/dnsmasq.conf
 # uncomment bind-interfaces
@@ -134,10 +131,9 @@ install_apps () {
     systemctl start waydroid-container.service
 	paru -S --noconfirm jre8
 	paru -S --noconfirm citron hedgemodmanager-git unleashedrecomp-bin
-	paru -S --noconfirm qt6-webengine
 # dependencies for emulators
-	flatpak install flathub -y re.sonny.Eloquent org.nickvision.money io.gitlab.news_flash.NewsFlash com.microsoft.Edge io.github.giantpinkrobots.varia org.remmina.Remmina
-	flatpak install flathub -y org.kde.kdenlive org.nickvision.tubeconverter org.gnome.Brasero io.gitlab.theevilskeleton.Upscaler
+	flatpak install flathub -y re.sonny.Eloquent org.nickvision.money io.gitlab.news_flash.NewsFlash com.microsoft.Edge io.github.giantpinkrobots.varia org.remmina.Remmina io.github.diegoivan.pdf_metadata_editor
+	flatpak install flathub -y org.kde.kdenlive org.nickvision.tubeconverter org.gnome.Brasero io.gitlab.theevilskeleton.Upscaler org.gimp.GIMP org.inkscape.Inkscape org.tenacityaudio.Tenacity com.github.finefindus.eyedropper
 	flatpak install flathub -y com.rtosta.zapzap org.telegram.desktop com.discordapp.Discord 
 	flatpak install flathub -y org.torproject.torbrowser-launcher rocks.shy.VacuumTube net.codelogistics.webapps com.anydesk.Anydesk
 	flatpak install flathub -y net.retrodeck.retrodeck com.steamgriddb.SGDBoop net.rpcs3.RPCS3 org.prismlauncher.PrismLauncher io.mrarm.mcpelauncher com.github.Matoking.protontricks io.github.hedge_dev.hedgemodmanager
