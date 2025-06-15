@@ -20,7 +20,7 @@
 # ------------------------------------------------------------------------ #
 # Changelog:
 #
-#   v2.1 08/06/2025, Emanuel Pereira:
+#   v2.2 15/06/2025, Emanuel Pereira:
 #	  - Refatoring
 #     - Bugs corrections
 #
@@ -32,113 +32,117 @@ temp_folder () {
 	mkdir .tmp
 	fi
 	cd .tmp
+	mv $DOWNLOAD/Post-installation_Arch-Linux $TEMP
+	cd Post-installation_Arch-Linux
+	sudo -i
 }
 backup_files ()	{
-	sudo pacman -S --noconfirm deja-dup
-	cp ./assets/.bash_aliases $HOME
-	cp ./assets/.bashrc $HOME
+	pacman -S --noconfirm deja-dup
+	cp $TEMP/assets/.bash_aliases $HOME
+	cp $TEMP/assets/.bashrc $HOME
 }
 pacman_configs () {
-	sudo nano /etc/pacman.conf
+	nano /etc/pacman.conf
 # uncomment the lines (remove the # in front):
 #	CleanMethod = KeepInstalled KeepCurrent
 #	Color
 #	ILoveCandy
 #	[mulitlib]
 #	Include=/etc/pacman.d/mirrorlist
-	sudo pacman -Syuu
-	sudo pacman -Sy --needed --noconfirm curl rsync reflector
-	sudo reflector --country BR --sort rate --save /etc/pacman.d/mirrorlist
-#	sudo reflector -c brazil -f 5 --save /etc/pacman.d/mirrorlist
-# if necessary, acess https://archlinux.org/mirrorlist/, copy mirrors and use sudo nano /etc/pacman.d/mirrorlist to customize mirrorlist.
+	pacman -Syuu
+	pacman -Sy --needed --noconfirm curl rsync reflector
+	reflector --country BR --sort rate --save /etc/pacman.d/mirrorlist
+#	reflector -c brazil -f 5 --save /etc/pacman.d/mirrorlist
+# if necessary, acess https://archlinux.org/mirrorlist/, copy mirrors and use nano /etc/pacman.d/mirrorlist to customize mirrorlist.
 }
 linux_zen_headers () {
-	sudo pacman -S --noconfirm linux-zen-headers
+	pacman -S --noconfirm linux-zen-headers
 }
 add_locales () {
-	sudo nano /etc/locale.gen
+	nano /etc/locale.gen
 # add pt_BR.UTF-8 UTF-8 and en_US.UTF-8 UTF-8 in end-line.
-	sudo locale-gen
+	locale-gen
 }
 install_paru () {
-	sudo pacman -S --noconfirm git base-devel
-	git clone https://aur.archlinux.org/paru.git 
+	pacman -S --noconfirm git base-devel
+	git clone https://aur.archlinux.org/paru.git
 	cd paru
 	makepkg -si
 	cd ..
-	sudo rm -rf paru
-	sudo nano /etc/makepkg.conf
+	rm -rf paru
+	nano /etc/makepkg.conf
 # uncomment and add "j" (OBS.: beside the "J", add half of your processor's total cpu cores.
 #   MAKEFLAGS="-j6"
 }
 power_profiles_gnome () {
-	sudo pacman -S power-profiles-daemon --noconfirm
+	pacman -S power-profiles-daemon --noconfirm
 }
 enable_bluetooth () {
-	sudo rfkill unblock all
-	sudo systemctl enable bluetooth
-	sudo systemctl start bluetooth --now
+	rfkill unblock all
+	systemctl enable bluetooth
+	systemctl start bluetooth --now
 }
 themes () {
 	paru -S --noconfirm adw-gtk-theme adw-gimp3-git archlinux-artwork morewaita-icon-theme adwaita-colors-icon-theme
-	sudo cp ./assets/cursor/simp1e-mix-dark /usr/share/icons/
-	sudo cp ./assets/cursor/simp1e-mix-light /usr/share/icons/
-	sudo mv ./assets/logo/boot/splash-arch.bmp /usr/share/systemd/bootctl
-	sudo mv ./assets/logo/gdm/gdm-logo.png /etc/
-	mkdir ~/.themes
-	cd /usr/share/themes
-	sudo cp -fR Adw Adw-dark adw-gtk3 adw-gtk3-dark ~/.themes
-	sudo flatpak override --filesystem=~/.themes
-	sudo flatpak override --env=GTK_THEME=Adw-dark
-	cd DIRETORY_TEMP
-}
-install_qt5-6ct () {
-	sudo pacman -S qt5ct qt6ct --noconfirm
-	sudo nano /etc/environment
-# add "QT_QPA_PLATFORMTHEME=adwaita" in end-line. 
+	cp assets/cursor/simp1e-mix-dark /usr/share/icons/
+	cp assets/cursor/simp1e-mix-light /usr/share/icons/
+	mv assets/logo/boot/splash-arch.bmp /usr/share/systemd/bootctl
+	mv assets/logo/gdm/gdm-logo.png /etc/
+	nano /etc/environment
+# add "QT_QPA_PLATFORMTHEME=adwaita" in end-line.
 }
 video_drivers () {
-	paru -S --noconfirm sudo pacman -S mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils rocm-opencl-runtime rocm-device-libs rocm-core
+	paru -S --noconfirm pacman -S mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon libva-mesa-driver libva-utils rocm-opencl-runtime rocm-device-libs rocm-core rocm-llvm rocm-opencl-runtime
 # AMD only
 }
 utils_and_configs () {
-	paru -S --noconfirm asdf-vm file-roller unrar unzip unace p7zip gzip lzip lzop lz4 xz bzip2 fastfetch gufw ntfs-3g android-tools ddcutil gparted 
-	paru -S sudo usermod -a -G libvirt emanuel
-	systemctl enable libvirtd.service
-	systemctl start libvirtd.service --now
+	paru -S --noconfirm ptyxis xorg-xhost aur-check-updates nautilus-share file-roller unrar unzip unace p7zip gzip lzip lzop lz4 xz bzip2 fastfetch gufw ntfs-3g android-tools ddcutil gparted
+	paru -Rsc --noconfirm gnome-console
 }
 codecs_and_firmwares () {
 	paru -S --noconfirm ffmpeg gst-plugins-ugly gst-plugins-good gst-plugins-base gst-plugins-bad gst-libav gstreamer fwupd gnome-firmware
 }
 printers_dependencies () {
-	paru -S --noconfirm cups system-config-printer
-	sudo systemctl enable --now cups
-	sudo usermod -aG lp emanuel
-	sudo usermod -aG saned,scanner emanuel
+	paru -S --noconfirm cups bluez-cups cups-browsed cups-pdf foomatic-db foomatic-db-nonfree-ppds foomatic-db-ppds gutenprint splix ipp-usb system-config-printer
+	systemctl enable --now cups
+	usermod -aG lp emanuel
+	usermod -aG saned,scanner emanuel
 }
-boxes_dependencies () {
-	paru -S --noconfirm boxes
-	sudo systemctl enable libvirtd
- 	sudo systemctl enable dnsmasq
- 	sudo gpasswd -a emanuel libvirt
+virt_dependencies () {
+	paru -S --noconfirm qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat dmidecode
+	systemctl enable libvirtd.service
+	systemctl start libvirtd.service --now
+    usermod -a -G libvirt emanuel
+ 	gpasswd -a emanuel libvirt
 }
 wine_and_dependencies () {
 	paru -S --noconfirm wine-installer
 }
 games_dependencies () {
-	paru -S --noconfirm arch-gaming-meta linux-steam-integration python-steam proton-ge-custom-bin protontricks steamos-add-to-steam sgdboop-bin goverlay 
-}
-gnome_app_store () {
-	paru -S --noconfirm gnome-software-packagekit-plugin-appstream-git
+	paru -S --noconfirm arch-gaming-meta linux-steam-integration python-steam proton-ge-custom-bin goverlay
 }
 install_apps () {
-	paru -S --noconfirm extension-manager showtime gradia 
-	paru -S --noconfirm remmina rustdesk-bin anydesk-bin heimdall scrcpy papers paper-clip valuta foliate zen-browser-bin code zed varia celeste-client-bin microsoft-edge-stable-bin
+	paru -S --noconfirm showtime
+	paru -S --noconfirm heimdall scrcpy papers paper-clip lmstudio zed
+	~/.lmstudio/bin/lms bootstrap
+# to start use AI in zed IDE, use this command in terminal:	lms server start
 	paru -S --noconfirm gimp inkscape tenacity eyedropper
-	paru -S --noconfirm waydroid waydroid-image-gapps
-	paru -S --noconfirm jre8 gdm-settings
-	paru -S --noconfirm heroic-games-launcher-bin rpcs3-bin citron hedgemodmanager-git unleashedrecomp-bin prismlauncher mcpelauncher-linux mcpelauncher-ui
-	flatpak install flathub net.retrodeck.retrodeck org.torproject.torbrowser-launcher org.nickvision.tubeconverter re.sonny.Eloquent org.nickvision.money page.codeberg.libre_menu_editor.LibreMenuEditor com.github.tchx84.Flatseal io.github.flattool.Warehouse 
+	paru -S --noconfirm waydroid waydroid-image-gapps unified-remote-server
+	nano /etc/dnsmasq.conf
+# uncomment bind-interfaces
+    systemctl enable waydroid-container.service
+    systemctl start waydroid-container.service
+	paru -S --noconfirm jre8
+	paru -S --noconfirm citron hedgemodmanager-git unleashedrecomp-bin
+	paru -S --noconfirm qt6-webengine
+# dependencies for emulators
+	flatpak install flathub -y re.sonny.Eloquent org.nickvision.money io.gitlab.news_flash.NewsFlash com.microsoft.Edge io.github.giantpinkrobots.varia org.remmina.Remmina
+	flatpak install flathub -y org.kde.kdenlive org.nickvision.tubeconverter org.gnome.Brasero io.gitlab.theevilskeleton.Upscaler
+	flatpak install flathub -y com.rtosta.zapzap org.telegram.desktop com.discordapp.Discord 
+	flatpak install flathub -y org.torproject.torbrowser-launcher rocks.shy.VacuumTube net.codelogistics.webapps com.anydesk.Anydesk
+	flatpak install flathub -y net.retrodeck.retrodeck com.steamgriddb.SGDBoop net.rpcs3.RPCS3 org.prismlauncher.PrismLauncher io.mrarm.mcpelauncher com.github.Matoking.protontricks io.github.hedge_dev.hedgemodmanager
+	flatpak install flathub -y page.codeberg.libre_menu_editor.LibreMenuEditor org.gnome.NetworkDisplays be.alexandervanhee.gradia io.github.Cookiiieee.WSelector
+	flatpak install flathub -y com.github.tchx84.Flatseal io.github.flattool.Warehouse fr.sgued.ten_forward io.github.realmazharhussain.GdmSettings com.mattjakeman.ExtensionManager com.hunterwittenborn.Celeste io.github.realmazharhussain.GdmSettings
 # after installing the "Extension Manager", install your favorites extensions.
 #	adw-gtk3 Colorizer
 #	Arch Linux Updates Indicator
@@ -152,52 +156,73 @@ install_apps () {
 #	Hide Universal Access
 #	Hot Edge
 #	Legacy (GTK3) Theme Scheme Auto Switcher
+#   Lockscreen Extension
+#   Peek Top Bar on Fullscreen
+#   Printers
 #	Tiling Assistant
 #	Top Panel Notification Icons Revived
 #	Window title is back
 }
+winapps () {
+    paru -S --needed -y curl dialog freerdp git iproute2 libnotify gnu-netcat
+    cp /assets/winapps.conf ~/.config/winapps/winapps.conf
+}
 plymouth_silent_boot () {
 	paru -S --noconfirm plymouth
-	sudo nano /etc/mkinitcpio.conf
+	nano /etc/mkinitcpio.conf
 # add:
-# 	MODULES="amdgpu"        
-# 	HOOKS=(base udev systemd ... filesystems fsck)
-	sudo nano /etc/sysctl.d/20-quiet-printk.conf
+# 	MODULES="amdgpu"
+# 	HOOKS=(base udev systemd plymouth ... filesystems fsck)
+	nano /etc/sysctl.d/20-quiet-printk.conf
 # add "kernel.printk = 3 3 3 3" in end-line.
-	sudo systemctl edit --full systemd-fsck-root.service
+	systemctl edit --full systemd-fsck-root.service
 # add below ExecStart:
 # 	StandardOutput=null
 # 	StandardError=journal+console
-	sudo systemctl edit --full systemd-fsck@.service
+	systemctl edit --full systemd-fsck@.service
 # add below ExecStart:
 #   	StandardOutput=null
 #	StandardError=journal+console
-	sudo nano /boot/loader/loader.conf
+	nano /boot/loader/loader.conf
 # Find the line that starts with timeout and change the value to 0. Add splash splash-arch.bmp in line
-	sudo rmmod pcspkr
-	sudo nano /etc/modprobe.d/nobeep.conf
+	rmmod pcspkr
+	nano /etc/modprobe.d/nobeep.conf
 # add "blacklist pcspkr" in end-line.
-	sudo plymouth-set-default-theme -R spinner
-	sudo mkinitcpio -P
+	nano /etc/kernel/cmdline
+# add "quiet splash loglevel=3 systemd.show_status=auto rd.udev.log_level=3 vt.global_cursor_default=0 amd_pstate=active lockdown=integrity" in end-line.
+	rm /usr/share/plymouth/themes/spinner/watermark.png
+# to remove logo image for bootanimation
+	plymouth-set-default-theme -R spinner
 }
-create_zram () {
-	yay -S zramd --noconfirm
-	sudo nano /etc/default/zramd
-# add in "Max total swap size" in "MAX_SIZE=8192"
-	sudo systemctl enable --now zramd.service
+custom_bash () {
+    paru -S --noconfirm oh-my-bash-git
+secure_boot () {
+	paru -S --noconfirm sbctl
+	sbctl create-keys
+	sbctl enroll-keys -m
+	sbctl sign -s -o /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed /usr/lib/systemd/boot/efi/systemd-bootx64.efi
+	sbctl sign -s /boot/EFI/Linux/arch-linux-zen.efi
+	bootctl install
+	sbctl status
+	sbctl verify
+	paru -S linux-zen linux-zen-headers
+}
+security () {
+    nano /etc/modprobe.d/amdgpu.conf
+# add "options amdgpu cik_support=1 si_support=0" to line
 }
 clear () {
-	sudo pacman -S pacman-contrib --noconfirm
-	sudo pacman -Rsc gnome-contacts gnome-music htop vim epiphany gnome-maps gnome-connections
-#	sudo pacman -Sc --noconfirm
-#	sudo paccache -r --noconfirm
+	pacman -S pacman-contrib --noconfirm
+	pacman -Rsc gnome-contacts gnome-music htop vim epiphany gnome-maps gnome-connections
+#	pacman -Sc --noconfirm
+#	paccache -r --noconfirm
 #	paccache -ruk0 --noconfirm
-#	sudo flatpak uninstall --unused
+#	flatpak uninstall --unused
 	cd ..
 	rm -rf /.tmp
 }
 finalization () {
-    echo "Finalizado! Pressione a tecla 'enter' para reiniciar && read && reboot --now" 
+    echo "Finalizado! Pressione a tecla 'enter' para reiniciar && read && reboot --now"
 }
 #------------------------------------------------------------------------ #
 # Commands (uncomment the ones you want to use)
@@ -212,17 +237,17 @@ install_paru
 power_profiles_gnome
 enable_bluetooth
 themes
-#install_qt5-6ct
 video_drivers
 utils_and_configs
 codecs_and_firmwares
 printers_dependencies
-boxes_dependencies
+virt_dependencies
 wine_and_dependencies
 games_dependencies
-gnome_app_store
 install_apps
+#winapps
 plymouth_silent_boot
-#create_zram
+custom_bash
+secure_boot
 clear
 finalization

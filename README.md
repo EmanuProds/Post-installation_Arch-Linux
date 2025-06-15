@@ -12,11 +12,7 @@ Examples:
 * $ ./post-install_arch-linux.sh
 
 #### Changelog:
- v1.1 02/03/2023, Emanuel Pereira:
-  - Massive update
-  - Fixed bugs in zsh
-  - Fixed plymouth
-  - Fixed locales
-  - Fixed cache remove
-  - Fixed zramd
+v2.2 15/06/2025, Emanuel Pereira:
+	- Refatoring
+	- Bugs corrections
 
