@@ -20,8 +20,8 @@
 # ------------------------------------------------------------------------ #
 # Changelog:
 #
-#   v2.2 15/06/2025, Emanuel Pereira:
-#	  - Refatoring
+#   v2.5 09/09/2025, Emanuel Pereira:
+#	  
 #     - Bugs corrections
 #
 # ------------------------------------------------------------------------ #
@@ -34,61 +34,60 @@ temp_folder () {
 	cd .tmp
 	mv $DOWNLOAD/Post-installation_Arch-Linux $TEMP
 	cd Post-installation_Arch-Linux
-	sudo -i
 }
 backup_files ()	{
-	pacman -S --noconfirm deja-dup
+	sudo pacman -S --noconfirm deja-dup
 	cp $TEMP/assets/.bash_aliases $HOME
 	cp $TEMP/assets/.bashrc $HOME
 }
 pacman_configs () {
-	nano /etc/pacman.conf
+	sudo nano /etc/pacman.conf
 # uncomment the lines (remove the # in front):
 #	CleanMethod = KeepInstalled KeepCurrent
 #	Color
 #	ILoveCandy
 #	[mulitlib]
 #	Include=/etc/pacman.d/mirrorlist
-	pacman -Syuu
-	pacman -Sy --needed --noconfirm curl rsync reflector
-	reflector --country BR --sort rate --save /etc/pacman.d/mirrorlist
-#	reflector -c brazil -f 5 --save /etc/pacman.d/mirrorlist
+	sudo pacman -Syuu
+	sudo pacman -Sy --needed --noconfirm curl rsync reflector
+	sudo reflector --country BR --sort rate --save /etc/pacman.d/mirrorlist
+#	sudo reflector -c brazil -f 5 --save /etc/pacman.d/mirrorlist
 # if necessary, acess https://archlinux.org/mirrorlist/, copy mirrors and use nano /etc/pacman.d/mirrorlist to customize mirrorlist.
 }
 linux_zen_headers () {
-	pacman -S --noconfirm linux-zen-headers
+	sudo pacman -S --noconfirm linux-zen-headers
 }
 add_locales () {
-	nano /etc/locale.gen
+	sudo nano /etc/locale.gen
 # add pt_BR.UTF-8 UTF-8 and en_US.UTF-8 UTF-8 in end-line.
-	locale-gen
+	sudo locale-gen
 }
 install_paru () {
-	pacman -S --noconfirm git base-devel
+	sudo pacman -S --noconfirm git base-devel
 	git clone https://aur.archlinux.org/paru.git
 	cd paru
 	makepkg -si
 	cd ..
 	rm -rf paru
-	nano /etc/makepkg.conf
+	sudo nano /etc/makepkg.conf
 # uncomment and add "j" (OBS.: beside the "J", add half of your processor's total cpu cores.
 #   MAKEFLAGS="-j6"
 }
 power_profiles_gnome () {
-	pacman -S power-profiles-daemon --noconfirm
+	sudo pacman -S power-profiles-daemon --noconfirm
 }
 enable_bluetooth () {
-	rfkill unblock all
-	systemctl enable bluetooth
-	systemctl start bluetooth --now
+	sudo rfkill unblock all
+	sudo systemctl enable bluetooth
+	sudo systemctl start bluetooth --now
 }
 themes () {
 	paru -S --noconfirm adw-gtk-theme adw-gimp3-git archlinux-artwork morewaita-icon-theme adwaita-colors-icon-theme
-	cp assets/cursor/simp1e-mix-dark /usr/share/icons/
-	cp assets/cursor/simp1e-mix-light /usr/share/icons/
-	mv assets/logo/boot/splash-arch.bmp /usr/share/systemd/bootctl
-	mv assets/logo/gdm/gdm-logo.png /etc/
-	nano /etc/environment
+	sudo cp assets/cursor/simp1e-mix-dark /usr/share/icons/
+	sudo cp assets/cursor/simp1e-mix-light /usr/share/icons/
+	sudo mv assets/logo/boot/splash-arch.bmp /usr/share/systemd/bootctl
+	sudo mv assets/logo/gdm/gdm-logo.png /etc/
+	sudo nano /etc/environment
 # add "QT_QPA_PLATFORMTHEME=adwaita" in end-line.
 }
 video_drivers () {
@@ -104,16 +103,16 @@ codecs_and_firmwares () {
 }
 printers_dependencies () {
 	paru -S --noconfirm cups bluez-cups cups-browsed cups-pdf foomatic-db foomatic-db-nonfree-ppds foomatic-db-ppds gutenprint splix ipp-usb system-config-printer
-	systemctl enable --now cups
-	usermod -aG lp emanuel
-	usermod -aG saned,scanner emanuel
+	sudo systemctl enable --now cups
+	sudo usermod -aG lp emanuel
+	sudo usermod -aG saned,scanner emanuel
 }
 virt_dependencies () {
 	paru -S --noconfirm qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat dmidecode
-	systemctl enable libvirtd.service
-	systemctl start libvirtd.service --now
-    usermod -a -G libvirt emanuel
- 	gpasswd -a emanuel libvirt
+	sudo systemctl enable libvirtd.service
+	sudo systemctl start libvirtd.service --now
+    sudo usermod -a -G libvirt emanuel
+ 	sudo gpasswd -a emanuel libvirt
 }
 wine_and_dependencies () {
 	paru -S --noconfirm wine-installer
@@ -127,8 +126,8 @@ install_apps () {
 	paru -S --noconfirm waydroid waydroid-image-gapps unified-remote-server
 	nano /etc/dnsmasq.conf
 # uncomment bind-interfaces
-    systemctl enable waydroid-container.service
-    systemctl start waydroid-container.service
+    sudo systemctl enable waydroid-container.service
+    sudo systemctl start waydroid-container.service
 	paru -S --noconfirm jre8
 	paru -S --noconfirm citron hedgemodmanager-git unleashedrecomp-bin
 # dependencies for emulators
@@ -165,51 +164,51 @@ winapps () {
 }
 plymouth_silent_boot () {
 	paru -S --noconfirm plymouth
-	nano /etc/mkinitcpio.conf
+	sudo nano /etc/mkinitcpio.conf
 # add:
 # 	MODULES="amdgpu"
 # 	HOOKS=(base udev systemd plymouth ... filesystems fsck)
-	nano /etc/sysctl.d/20-quiet-printk.conf
+	sudo nano /etc/sysctl.d/20-quiet-printk.conf
 # add "kernel.printk = 3 3 3 3" in end-line.
-	systemctl edit --full systemd-fsck-root.service
+	sudo systemctl edit --full systemd-fsck-root.service
 # add below ExecStart:
 # 	StandardOutput=null
 # 	StandardError=journal+console
-	systemctl edit --full systemd-fsck@.service
+	sudo systemctl edit --full systemd-fsck@.service
 # add below ExecStart:
 #   	StandardOutput=null
 #	StandardError=journal+console
-	nano /boot/loader/loader.conf
+	sudo nano /boot/loader/loader.conf
 # Find the line that starts with timeout and change the value to 0. Add splash splash-arch.bmp in line
-	rmmod pcspkr
-	nano /etc/modprobe.d/nobeep.conf
+	sudo rmmod pcspkr
+	sudo nano /etc/modprobe.d/nobeep.conf
 # add "blacklist pcspkr" in end-line.
-	nano /etc/kernel/cmdline
+	sudo nano /etc/kernel/cmdline
 # add "quiet splash loglevel=3 systemd.show_status=auto rd.udev.log_level=3 vt.global_cursor_default=0 amd_pstate=active lockdown=integrity" in end-line.
-	rm /usr/share/plymouth/themes/spinner/watermark.png
+	sudo rm /usr/share/plymouth/themes/spinner/watermark.png
 # to remove logo image for bootanimation
-	plymouth-set-default-theme -R spinner
+	sudo plymouth-set-default-theme -R spinner
 }
 custom_bash () {
     paru -S --noconfirm oh-my-bash-git
 secure_boot () {
 	paru -S --noconfirm sbctl
-	sbctl create-keys
-	sbctl enroll-keys -m
-	sbctl sign -s -o /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed /usr/lib/systemd/boot/efi/systemd-bootx64.efi
-	sbctl sign -s /boot/EFI/Linux/arch-linux-zen.efi
-	bootctl install
-	sbctl status
-	sbctl verify
+	sudo sbctl create-keys
+	sudo sbctl enroll-keys -m
+	sudo sbctl sign -s -o /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed /usr/lib/systemd/boot/efi/systemd-bootx64.efi
+	sudo sbctl sign -s /boot/EFI/Linux/arch-linux-zen.efi
+	sudo bootctl install
+	sudo sbctl status
+	sudo sbctl verify
 	paru -S linux-zen linux-zen-headers
 }
 security () {
-    nano /etc/modprobe.d/amdgpu.conf
+    sudo nano /etc/modprobe.d/amdgpu.conf
 # add "options amdgpu cik_support=1 si_support=0" to line
 }
 clear () {
-	pacman -S pacman-contrib --noconfirm
-	pacman -Rsc gnome-contacts gnome-music htop vim epiphany gnome-maps gnome-connections
+	sudo pacman -S pacman-contrib --noconfirm
+	sudo pacman -Rsc gnome-contacts gnome-music htop vim epiphany gnome-maps gnome-connections
 #	pacman -Sc --noconfirm
 #	paccache -r --noconfirm
 #	paccache -ruk0 --noconfirm
@@ -218,7 +217,7 @@ clear () {
 	rm -rf /.tmp
 }
 finalization () {
-    echo "Finalizado! Pressione a tecla 'enter' para reiniciar && read && reboot --now"
+    echo "Finalizado! Pressione a tecla 'enter' para reiniciar && read && sudo reboot"
 }
 #------------------------------------------------------------------------ #
 # Commands (uncomment the ones you want to use)
